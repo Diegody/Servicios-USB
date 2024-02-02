@@ -166,10 +166,13 @@ class CredencialesE2ScreenE extends StatelessWidget {
                 },
                 child: Text('Restablecer Usuario ASIS',
                     style: TextStyle(
-                      color: Colors.black, // Cambia aquí el color del texto
+                      color: Colors.black,
                     )),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
+                style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all(
+                      Size(320, 20)), // Especifica el tamaño deseado
+                  backgroundColor: MaterialStateProperty.all(
+                      Colors.orange), // Color de fondo del botón
                 ),
               ),
             ),
@@ -256,8 +259,11 @@ class CredencialesE2ScreenE extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
+                style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all(
+                      Size(320, 20)), // Especifica el tamaño deseado
+                  backgroundColor: MaterialStateProperty.all(
+                      Colors.orange), // Color de fondo del botón
                 ),
               ),
             ),
