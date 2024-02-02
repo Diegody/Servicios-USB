@@ -32,18 +32,10 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _correoInstitucionalController =
       TextEditingController();
-  TextEditingController? _tematicaController;
-
-  final TextEditingController _nombreApellidoController =
-      TextEditingController();
-  final TextEditingController _codigoProfesorController =
+  final TextEditingController? _tematicaTutoriaController =
       TextEditingController();
   final TextEditingController _tipoTutoriaController = TextEditingController();
   final TextEditingController _integrantesController = TextEditingController();
-  final TextEditingController _materiaTutoriaController =
-      TextEditingController();
-  final TextEditingController _tematicaTutoriaController =
-      TextEditingController();
 
   List<String> programas = [];
   List<String> programasAll = [];
@@ -68,12 +60,10 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
     _loadOpcProgramaAcademico();
     _loadProgramas();
     _loadCorreoEstudiante();
+    buscarEstudiantes(textFieldController.text);
     _documentoController.text = globalDocumento!;
     _usernameController.text = globalUsername!;
-    _tematicaController = TextEditingController();
-    textFieldController.addListener(() {
-      buscarEstudiantes(textFieldController.text);
-    });
+    textFieldController.addListener(() {});
   }
 
   Future<void> _loadProgramas() async {
@@ -244,7 +234,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
   Widget _buildTextFieldUnloked(
       String label, String hint, TextEditingController? controller) {
     return TextFormField(
-      controller: _tematicaController, // Usa el nuevo controlador
+      controller: _tematicaTutoriaController, // Usa el nuevo controlador
       enabled: true, // Ahora está habilitado para edición
       decoration: InputDecoration(
         labelText: label,
@@ -578,13 +568,13 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
               _buildDropdownFieldWithTeach(
                 'Profesores de tuturìa',
                 _opcionCursoTList.map((map) => map['text'].toString()).toList(),
-                selectedOpcionCursoT,
+                selectedOpcionTeachT,
               ),
               SizedBox(height: 16),
               _buildTextFieldUnloked(
                 'Temática',
                 'Tema a tratar en la tutoría',
-                _tematicaController,
+                _tematicaTutoriaController,
               ),
               SizedBox(height: 50),
               ElevatedButton(
@@ -740,16 +730,18 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
         'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/EnvioSolicitudCorreo.php';
 
     Map<String, String> datosFormulario = {
-      'NOMBREAPELLIDO': _nombreApellidoController.text,
-      'CODIGOPROFESOR': _codigoProfesorController.text,
+      'DOCUMENTO': _documentoController.text,
+      'NOMBREAPELLIDO': _usernameController.text,
+      'CORREO_INST': _correoInstitucionalController.text,
       'TIPOTUTORIA': _tipoTutoriaController.text,
       'INTEGRANTES': _integrantesController.text,
-      'CARRERA': _materiaTutoriaController.text,
-      'MATERIA_TUTORIA': _tematicaTutoriaController.text,
-      'TEMATICA_TUTORIA': _tematicaTutoriaController.text,
-      'CORREO_INST': _correoInstitucionalController.text,
-      'DOCUMENTO': _documentoController.text,
+      'CARRERA': selectedOpcionProgramaT,
+      'MATERIA_TUTORIA': selectedOpcionCursoT,
+      'CODIGOPROFESOR': selectedOpcionTeachT,
+      'TEMATICA_TUTORIA': _tematicaTutoriaController?.text ?? '',
     };
+
+    print('Datos del formulario: $datosFormulario');
 
     try {
       final response = await http.post(
