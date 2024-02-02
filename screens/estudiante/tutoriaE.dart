@@ -34,8 +34,6 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
       TextEditingController();
   final TextEditingController? _tematicaTutoriaController =
       TextEditingController();
-  final TextEditingController _tipoTutoriaController = TextEditingController();
-  final TextEditingController _integrantesController = TextEditingController();
 
   List<String> programas = [];
   List<String> programasAll = [];
@@ -53,6 +51,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
   List<String> selectedStudents = [];
   List<String> estudiantesEncontrados = [];
   bool showEstudiantesList = false;
+  bool atLeastOneStudentSelected = false;
 
   @override
   void initState() {
@@ -579,12 +578,28 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
               SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    // Si el formulario es válido, envía la solicitud
-                    enviarSolicitud();
+                  _startLoadingAnimation();
+                  if (selectedOption == 'Grupal' && selectedStudents.isEmpty) {
+                    _stopLoadingAnimation();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Solicitud enviada')),
+                      SnackBar(
+                        content: Text(
+                            'Debe seleccionar al menos un estudiante para la opción grupal.'),
+                        backgroundColor: Colors.red,
+                      ),
                     );
+                  } else {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      _stopLoadingAnimation();
+                      // Si el formulario es válido, envía la solicitud
+                      enviarSolicitud();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Solicitud enviada'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
                   }
                 },
                 child: Text('Enviar solicitud',
@@ -733,13 +748,17 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
       'DOCUMENTO': _documentoController.text,
       'NOMBREAPELLIDO': _usernameController.text,
       'CORREO_INST': _correoInstitucionalController.text,
-      'TIPOTUTORIA': _tipoTutoriaController.text,
-      'INTEGRANTES': _integrantesController.text,
       'CARRERA': selectedOpcionProgramaT,
       'MATERIA_TUTORIA': selectedOpcionCursoT,
       'CODIGOPROFESOR': selectedOpcionTeachT,
       'TEMATICA_TUTORIA': _tematicaTutoriaController?.text ?? '',
     };
+
+    if (selectedOption == 'Grupal') {
+      datosFormulario['TIPOTUTORIA'] = selectedOption;
+      datosFormulario['INTEGRANTES'] = selectedStudents.join(', ');
+      ;
+    }
 
     print('Datos del formulario: $datosFormulario');
 
