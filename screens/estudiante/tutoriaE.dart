@@ -728,7 +728,6 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
     );
 
     if (response.statusCode == 200) {
-      // Procesar la respuesta del servidor y actualizar la lista
       List<dynamic> data = json.decode(response.body);
       setState(() {
         estudiantesEncontrados =
@@ -770,14 +769,14 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
 
       if (response.statusCode == 200) {
         // Procesa la respuesta si es necesario
-        print('Solicitud enviada con éxito');
+        print('Solicitud enviada con éxito: ${response.statusCode}');
       } else {
         // Maneja errores de la respuesta
         print(
             'Error en la solicitud. Código de estado: ${response.statusCode}');
       }
     } catch (error) {
-      // Maneja errores de la conexión
+      // Maneja errores de la conexiónp
       print('Error de conexión: $error');
     }
   }
