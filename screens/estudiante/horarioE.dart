@@ -9,6 +9,7 @@ import '../../globals.dart';
 import '../login.dart';
 import 'credencialesE.dart';
 import 'icetexE.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,6 +31,7 @@ class _HorarioEScreenEState extends State<HorarioEScreenE> {
   final TextEditingController _searchController = TextEditingController();
   List<dynamic> _originalHorarioData = [];
   List<dynamic> _filteredHorarioData = [];
+  CalendarController _calendarController = CalendarController();
 
   @override
   void initState() {
@@ -98,6 +100,11 @@ class _HorarioEScreenEState extends State<HorarioEScreenE> {
                 prefixIcon: Icon(Icons.search),
               ),
             ),
+          ),
+          SfCalendar(
+            view: CalendarView.month,
+            controller: _calendarController,
+            // Personaliza la apariencia del calendario según tus necesidades
           ),
           Expanded(
             child: _buildHorarioList(),
