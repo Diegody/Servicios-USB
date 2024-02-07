@@ -103,20 +103,16 @@ class _HorarioEScreenEState extends State<HorarioEScreenE> {
           ),
           Container(
             decoration: BoxDecoration(
-              border: Border.all(
-                  color: Colors
-                      .grey), // Añade un borde gris alrededor del calendario
-              borderRadius: BorderRadius.circular(
-                  10), // Opcional: Añade bordes redondeados al contenedor
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: SfCalendar(
               view: CalendarView.month,
               controller: _calendarController,
-              // Personaliza la apariencia del calendario según tus necesidades
-              hoverDecoration: BoxDecoration(
-                color: Colors
-                    .orangeAccent, // Color de fondo cuando pasas el cursor sobre un día
-                shape: BoxShape.rectangle, // Forma del contenedor (rectángulo)
+
+              selectionDecoration: BoxDecoration(
+                color: Colors.orangeAccent,
+                shape: BoxShape.rectangle,
               ),
               todayHighlightColor:
                   Colors.orange, // Color de la marcación del día actual
