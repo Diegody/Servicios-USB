@@ -9,7 +9,6 @@ import '../../globals.dart';
 import '../login.dart';
 import 'credencialesE.dart';
 import 'icetexE.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,7 +30,6 @@ class _HorarioEScreenEState extends State<HorarioEScreenE> {
   final TextEditingController _searchController = TextEditingController();
   List<dynamic> _originalHorarioData = [];
   List<dynamic> _filteredHorarioData = [];
-  CalendarController _calendarController = CalendarController();
 
   @override
   void initState() {
@@ -99,23 +97,6 @@ class _HorarioEScreenEState extends State<HorarioEScreenE> {
                 labelText: 'Buscar',
                 prefixIcon: Icon(Icons.search),
               ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: SfCalendar(
-              view: CalendarView.month,
-              controller: _calendarController,
-
-              selectionDecoration: BoxDecoration(
-                color: Colors.orangeAccent,
-                shape: BoxShape.rectangle,
-              ),
-              todayHighlightColor:
-                  Colors.orange, // Color de la marcación del día actual
             ),
           ),
           Expanded(
