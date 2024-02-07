@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../auth.dart';
-import '../../globals.dart';
-import '../login.dart';
-import 'horarioD.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,112 +27,70 @@ class TutoriaDScreenD extends StatelessWidget {
           ),
         ),
       ),
-      drawer: MyDrawer(), // Agrega el Drawer a la interfaz
-      body: Center(
-        child: Text('Docente Petición de Tutorías'),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(height: 20), // Separación entre los botones
+          _buildSectionButton(
+            context,
+            'Tutoría individual',
+            Icons.person,
+            () {
+              // Acción al presionar "Tutoría individual"
+              // Ejemplo: Navigator.push(context, MaterialPageRoute(builder: (context) => IndividualTutoriaScreen()));
+            },
+          ),
+          SizedBox(height: 20), // Separación entre los botones
+          _buildSectionButton(
+            context,
+            'Tutoría grupal',
+            Icons.group,
+            () {
+              // Acción al presionar "Tutoría grupal"
+              // Ejemplo: Navigator.push(context, MaterialPageRoute(builder: (context) => GrupalTutoriaScreen()));
+            },
+          ),
+        ],
       ),
     );
   }
-}
 
-class MyDrawer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Imagen en el DrawerHeader
-                      Image.asset(
-                        'assets/images/logo_acreditacion.png',
-                        width: 300.0,
-                        height: 100.0,
-                      ),
-                      SizedBox(height: 8.0),
-                      Text(
-                        globalUsername ?? 'Nombre de Usuario',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.schedule),
-                  title: Text('Horario de Clases'),
-                  onTap: () {
-                    // Acción al hacer clic en "Horario de Clases"
-                    Navigator.pop(context); // Cierra el Drawer
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HorarioDScreenD()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.group),
-                  title: Text('Petición de Tutorías'),
-                  onTap: () {
-                    // Acción al hacer clic en "Horarios de Tutorías"
-                    Navigator.pop(context); // Cierra el Drawer
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TutoriaDScreenD()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.exit_to_app),
-                  title: Text('Cerrar Sesión'),
-                  onTap: () {
-                    // Cierra el Drawer
-                    Navigator.pop(context);
-                    // Cierra la sesión utilizando el AuthManager
-                    AuthManager.logout();
-                    // Redirige al usuario a la pantalla de inicio de sesión
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginView()),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Cerrando sesión...'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  },
-                ),
-              ],
+  Widget _buildSectionButton(
+    BuildContext context,
+    String title,
+    IconData icon,
+    VoidCallback onPressed,
+  ) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        margin: EdgeInsets.symmetric(
+            horizontal: 30), // Ajusta el margen horizontal según tu preferencia
+        width: MediaQuery.of(context).size.width -
+            40, // Ancho máximo igual al del dispositivo menos el doble del margen horizontal
+        decoration: BoxDecoration(
+          color: const Color.fromRGBO(18, 182, 207, 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 60, // Tamaño del icono ajustado según tu preferencia
             ),
-          ),
-          // Información adicional en toda la base del menú con las mismas propiedades
-          Container(
-            width: double.infinity, // Ancho máximo posible
-            padding: EdgeInsets.all(16.0),
-            color: Colors.orange,
-            child: Text(
-              appVersion,
+            SizedBox(height: 10), // Espacio entre el icono y el texto
+            Text(
+              title,
               style: TextStyle(
-                fontSize: 14.0,
-                color: Colors.black54,
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
