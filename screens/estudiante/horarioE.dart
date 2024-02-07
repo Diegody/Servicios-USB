@@ -109,7 +109,18 @@ class _HorarioEScreenEState extends State<HorarioEScreenE> {
 
   Widget _buildHorarioList() {
     if (_filteredHorarioData.isEmpty) {
-      return Center(child: Text('No hay datos disponibles'));
+      return Center(
+        child: Container(
+          child: Text(
+            'No hay datos disponibles',
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      );
     }
 
     return ListView.builder(
