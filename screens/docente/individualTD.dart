@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../../globals.dart';
+import 'package:servicios/screens/docente/sesionTD.dart';
 
 class IndividualTutoriaScreen extends StatefulWidget {
   @override
@@ -43,6 +45,21 @@ class _IndividualTutoriaScreenState extends State<IndividualTutoriaScreen> {
               item.values.any((value) => value.toString().contains(query)))
           .toList();
     });
+  }
+
+  void _navigateToDetailsPage(String ciclo, String documento) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SesionTDScreenD(
+          rowData: {
+            'CICLO': ciclo,
+            'DOCUMENTO': documento,
+            'DOC_DOC': globalCodigoDocente
+          },
+        ),
+      ),
+    );
   }
 
   @override
@@ -100,6 +117,7 @@ class _IndividualTutoriaScreenState extends State<IndividualTutoriaScreen> {
                     ),
                     rowsPerPage: 15, // Número de filas por página
                     columns: <DataColumn>[
+                      DataColumn(label: Text('VER MÁS')),
                       DataColumn(label: Text('CICLO')),
                       DataColumn(label: Text('DOCUMENTO')),
                       DataColumn(label: Text('CODIGO ESTUDIANTIL')),
@@ -113,7 +131,10 @@ class _IndividualTutoriaScreenState extends State<IndividualTutoriaScreen> {
                       DataColumn(label: Text('VINCULACION')),
                       DataColumn(label: Text('FACULTAD')),
                     ],
-                    source: DynamicDataSource(_filteredData),
+                    source: DynamicDataSource(
+                      _filteredData,
+                      _navigateToDetailsPage,
+                    ),
                   ),
                 ),
               ),
@@ -127,15 +148,24 @@ class _IndividualTutoriaScreenState extends State<IndividualTutoriaScreen> {
 
 class DynamicDataSource extends DataTableSource {
   final List<Map<String, dynamic>> data;
+  final Function(String, String) onTap;
   int _selectedRowCount = 0;
 
-  DynamicDataSource(this.data);
+  DynamicDataSource(this.data, this.onTap);
 
   @override
   DataRow? getRow(int index) {
     if (index >= data.length) return null;
     final rowData = data[index];
     return DataRow(cells: <DataCell>[
+      DataCell(
+        IconButton(
+          icon: Icon(Icons.arrow_forward),
+          onPressed: () {
+            onTap(rowData['CICLO'].toString(), rowData['DOCUMENTO'].toString());
+          },
+        ),
+      ),
       DataCell(Text(rowData['CICLO'].toString())),
       DataCell(Text(rowData['DOCUMENTO'].toString())),
       DataCell(Text(rowData['CODIGOESTUDIANTIL'].toString())),
