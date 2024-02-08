@@ -10,6 +10,9 @@ class IndividualTutoriaScreen extends StatefulWidget {
 
 class _IndividualTutoriaScreenState extends State<IndividualTutoriaScreen> {
   List<Map<String, dynamic>> _data = [];
+  List<Map<String, dynamic>> _filteredData = [];
+
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -24,14 +27,22 @@ class _IndividualTutoriaScreenState extends State<IndividualTutoriaScreen> {
       ),
     );
     if (response.statusCode == 200) {
-      // print('Cuerpo de la respuesta: ${response.body}');
       setState(() {
         _data = List<Map<String, dynamic>>.from(json.decode(response.body));
-        print('Número de datos recuperados: ${_data.length}');
+        _filteredData = _data;
       });
     } else {
       print('Error al recuperar los datos: ${response.statusCode}');
     }
+  }
+
+  void _filterData(String query) {
+    setState(() {
+      _filteredData = _data
+          .where((item) =>
+              item.values.any((value) => value.toString().contains(query)))
+          .toList();
+    });
   }
 
   @override
@@ -49,52 +60,66 @@ class _IndividualTutoriaScreenState extends State<IndividualTutoriaScreen> {
           ),
         ),
       ),
-      // header: Text('Listado estudiantes tutorías',),
-
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: ConstrainedBox(
-          constraints:
-              BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              dataTableTheme: DataTableThemeData(
-                headingRowColor: MaterialStateColor.resolveWith(
-                  (states) => Colors.orange,
-                  // Color naranja para el encabezado
-                ),
-                dataRowColor: MaterialStateColor.resolveWith(
-                    (states) => const Color.fromARGB(255, 255, 255, 255)!),
-                // Color naranja para el contenido
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              onChanged: _filterData,
+              decoration: InputDecoration(
+                labelText: 'Buscar',
+                prefixIcon: Icon(Icons.search),
               ),
-            ),
-            child: PaginatedDataTable(
-              header: Text(
-                'Listado estudiantes tutorías',
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 0, 0, 0),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              rowsPerPage: 15, // Número de filas por página
-              columns: <DataColumn>[
-                DataColumn(label: Text('CICLO')),
-                DataColumn(label: Text('DOCUMENTO')),
-                DataColumn(label: Text('CODIGO ESTUDIANTIL')),
-                DataColumn(label: Text('PRIMER NOMBRE')),
-                DataColumn(label: Text('SEGUNDO NOMBRE')),
-                DataColumn(label: Text('PRIMER APELLIDO')),
-                DataColumn(label: Text('SEGUNDO APELLIDO')),
-                DataColumn(label: Text('CORREO PERSONAL')),
-                DataColumn(label: Text('CORREO INSTITUCIONAL')),
-                DataColumn(label: Text('PROGRAMA')),
-                DataColumn(label: Text('VINCULACION')),
-                DataColumn(label: Text('FACULTAD')),
-              ],
-              source: DynamicDataSource(_data),
             ),
           ),
-        ),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width,
+                ),
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    dataTableTheme: DataTableThemeData(
+                      headingRowColor: MaterialStateColor.resolveWith(
+                        (states) => Colors.orange,
+                      ),
+                      dataRowColor: MaterialStateColor.resolveWith(
+                          (states) => const Color.fromARGB(255, 255, 255, 255)),
+                    ),
+                  ),
+                  child: PaginatedDataTable(
+                    header: Text(
+                      'Listado estudiantes tutorías',
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 0, 0, 0),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    rowsPerPage: 15, // Número de filas por página
+                    columns: <DataColumn>[
+                      DataColumn(label: Text('CICLO')),
+                      DataColumn(label: Text('DOCUMENTO')),
+                      DataColumn(label: Text('CODIGO ESTUDIANTIL')),
+                      DataColumn(label: Text('PRIMER NOMBRE')),
+                      DataColumn(label: Text('SEGUNDO NOMBRE')),
+                      DataColumn(label: Text('PRIMER APELLIDO')),
+                      DataColumn(label: Text('SEGUNDO APELLIDO')),
+                      DataColumn(label: Text('CORREO PERSONAL')),
+                      DataColumn(label: Text('CORREO INSTITUCIONAL')),
+                      DataColumn(label: Text('PROGRAMA')),
+                      DataColumn(label: Text('VINCULACION')),
+                      DataColumn(label: Text('FACULTAD')),
+                    ],
+                    source: DynamicDataSource(_filteredData),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
