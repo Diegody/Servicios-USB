@@ -616,7 +616,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
   Future<List<String>> getProgramasEstudiante(String documento) async {
     final response = await http.post(
       Uri.parse(
-          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/PeticionesInformacionDatos/PeticionPrograma.php'),
+          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/PeticionPrograma.php'),
       body: {'CODIGO': documento},
     );
 
@@ -635,7 +635,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
   Future<String> getCorreoEstudiante(String documento) async {
     final response = await http.post(
       Uri.parse(
-          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/PeticionesInformacionDatos/PeticionCorreo.php'),
+          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/PeticionCorreo.php'),
       body: {'CODIGO': documento},
     );
 
@@ -660,7 +660,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
   Future<List<Map<String, dynamic>>> getOpcPrograma() async {
     final response = await http.post(
       Uri.parse(
-          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/PeticionesInformacionDatos/ProgramaDeTutoria.php'),
+          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/ProgramaDeTutoria.php'),
     );
 
     if (response.statusCode == 200) {
@@ -680,7 +680,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
   Future<List<Map<String, dynamic>>> getOpcCurso(String programa) async {
     final response = await http.post(
         Uri.parse(
-            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/PeticionesInformacionDatos/PeticionCursoTutoria.php'),
+            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/PeticionCursoTutoria.php'),
         body: {'PROG_ACADEMICO': programa});
 
     if (response.statusCode == 200) {
@@ -703,7 +703,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
   Future<List<Map<String, dynamic>>> getOpcTeach(String curso) async {
     final response = await http.post(
         Uri.parse(
-            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/PeticionesInformacionDatos/ProfesorACargo.php'),
+            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/ProfesorACargo.php'),
         body: {'CURSO': curso});
 
     if (response.statusCode == 200) {
@@ -723,7 +723,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
   void buscarEstudiantes(String query) async {
     final response = await http.post(
       Uri.parse(
-          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/PeticionesInformacionDatos/BusquedaEstudiantes.php'),
+          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/FormularioTutoria/BusquedaEstudiantes.php'),
       body: {'ESTUDIANTE': query},
     );
 

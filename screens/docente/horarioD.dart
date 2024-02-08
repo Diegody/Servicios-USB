@@ -209,7 +209,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: Icon(Icons.group),
-                  title: Text('Petición de Tutorías'),
+                  title: Text('Tutorías Académicas'),
                   onTap: () {
                     // Acción al hacer clic en "Horarios de Tutorías"
                     Navigator.pop(context); // Cierra el Drawer

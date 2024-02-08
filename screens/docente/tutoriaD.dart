@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:servicios/screens/docente/calendarioTD.dart';
+import 'package:servicios/screens/docente/grupalTD.dart';
+import 'package:servicios/screens/docente/individualTD.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,11 +15,19 @@ class MyApp extends StatelessWidget {
 }
 
 class TutoriaDScreenD extends StatelessWidget {
+  final double _buttonMargin = 30.0;
+  final double _buttonWidth = double.infinity - 40.0;
+  final double _iconSize = 80.0;
+  final double _textSize = 20.0;
+  final double _titlePadding = 20.0;
+  final double _verticalSpacing = 10.0;
+  final double _borderRadius = 10.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Petición de Tutorías'),
+        title: Text('Tutorías Académicas'),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -30,27 +41,72 @@ class TutoriaDScreenD extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: 20), // Separación entre los botones
+          SizedBox(height: _verticalSpacing),
+          _buildSectionTitle('Tipo de tutoría'),
+          SizedBox(height: _verticalSpacing),
           _buildSectionButton(
             context,
             'Tutoría individual',
             Icons.person,
+            const Color.fromRGBO(18, 182, 207, 1),
             () {
-              // Acción al presionar "Tutoría individual"
-              // Ejemplo: Navigator.push(context, MaterialPageRoute(builder: (context) => IndividualTutoriaScreen()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => IndividualTutoriaScreen(),
+                ),
+              );
             },
           ),
-          SizedBox(height: 20), // Separación entre los botones
+          SizedBox(height: _verticalSpacing),
           _buildSectionButton(
             context,
             'Tutoría grupal',
             Icons.group,
+            const Color.fromRGBO(18, 182, 207, 1),
             () {
-              // Acción al presionar "Tutoría grupal"
-              // Ejemplo: Navigator.push(context, MaterialPageRoute(builder: (context) => GrupalTutoriaScreen()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GrupalTutoriaScreen(),
+                ),
+              );
+            },
+          ),
+          SizedBox(height: _verticalSpacing * 3),
+          _buildSectionTitle('Calendario de sesiones de tutoría'),
+          SizedBox(height: _verticalSpacing),
+          _buildSectionButton(
+            context,
+            'Calendario de sesiones',
+            Icons.calendar_month,
+            const Color.fromRGBO(48, 159, 219, 1),
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CalendarioTutoriaScreen(),
+                ),
+              );
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: _titlePadding),
+        child: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: _textSize,
+          ),
+        ),
       ),
     );
   }
@@ -59,18 +115,17 @@ class TutoriaDScreenD extends StatelessWidget {
     BuildContext context,
     String title,
     IconData icon,
+    Color color,
     VoidCallback onPressed,
   ) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        margin: EdgeInsets.symmetric(
-            horizontal: 30), // Ajusta el margen horizontal según tu preferencia
-        width: MediaQuery.of(context).size.width -
-            40, // Ancho máximo igual al del dispositivo menos el doble del margen horizontal
+        margin: EdgeInsets.symmetric(horizontal: _buttonMargin),
+        width: _buttonWidth,
         decoration: BoxDecoration(
-          color: const Color.fromRGBO(18, 182, 207, 1),
-          borderRadius: BorderRadius.circular(10),
+          color: color,
+          borderRadius: BorderRadius.circular(_borderRadius),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -78,14 +133,14 @@ class TutoriaDScreenD extends StatelessWidget {
             Icon(
               icon,
               color: Colors.white,
-              size: 60, // Tamaño del icono ajustado según tu preferencia
+              size: _iconSize,
             ),
-            SizedBox(height: 10), // Espacio entre el icono y el texto
+            SizedBox(height: _verticalSpacing),
             Text(
               title,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: _textSize,
                 fontWeight: FontWeight.bold,
               ),
             ),
