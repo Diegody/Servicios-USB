@@ -45,25 +45,6 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: DataTable(
-          columns: <DataColumn>[
-            DataColumn(label: Text('Columna 1')),
-            DataColumn(label: Text('Columna 2')),
-            // Agrega más DataColumn según la cantidad de columnas en tus datos
-          ],
-          rows: _data.map((rowData) {
-            return DataRow(
-              cells: <DataCell>[
-                DataCell(Text(rowData['campo1'])),
-                DataCell(Text(rowData['campo2'])),
-                // Agrega más DataCell según la cantidad de columnas en tus datos
-              ],
-            );
-          }).toList(),
-        ),
-      ),
     );
   }
 }

@@ -51,7 +51,6 @@ class _LoginViewState extends State<LoginView> {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              // Ajusta la alineación vertical aquí
               children: [
                 SingleChildScrollView(
                   child: Column(
@@ -60,7 +59,7 @@ class _LoginViewState extends State<LoginView> {
                       SizedBox(height: 10),
                       TextField(
                         controller: _usernameController,
-                        keyboardType: TextInputType.number,  // Teclado a número
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: 'ID Usuario',
                           fillColor: Colors.white,
@@ -72,7 +71,7 @@ class _LoginViewState extends State<LoginView> {
                         onPressed: () => authenticateUser(context),
                         child: Text('Iniciar Sesión',
                             style: TextStyle(
-                              color: Colors.black, // Cambia aquí el color del texto
+                              color: Colors.black,
                             )),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.orange,
@@ -84,7 +83,6 @@ class _LoginViewState extends State<LoginView> {
                 Builder(
                   builder: (BuildContext context) {
                     if (_loginError) {
-                      // Mostrar SnackBar en la parte inferior de la pantalla
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Error: Usuario inválido'),
@@ -107,7 +105,6 @@ class _LoginViewState extends State<LoginView> {
     final String username = _usernameController.text;
 
     if (username.isEmpty) {
-      // Mostrar SnackBar cuando no se proporciona un nombre de usuario
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Por favor, ingrese su ID de usuario'),
@@ -132,18 +129,17 @@ class _LoginViewState extends State<LoginView> {
         final Map<String, dynamic> data = json.decode(response.body);
 
         if (data.containsKey('error')) {
-          // Hay un error en la respuesta del servidor, mostrar un SnackBar y evitar la navegación
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${data['error']}'),
               backgroundColor: Colors.red,
             ),
           );
-          // No realizar la navegación a la pantalla de inicio
         } else {
           globalCodigoEstudiante = data['EMPLID'];
-          // Autenticación exitosa, puedes acceder a los valores result.DOCUMENTO, result.EMPLID, result.NIT
-          globalUsername = data['NOMBRE']; // Asigna el nombre de usuario a la variable global
+          // Autenticación exitosa
+          globalUsername = data[
+              'NOMBRE']; // Asigna el nombre de usuario a la variable global
           globalDocumento = data['DOCUMENTO'];
           if (data['NIT'] == 'DOC') {
             globalCodigoDocente = data['DOCUMENTO'];
@@ -170,31 +166,25 @@ class _LoginViewState extends State<LoginView> {
           }
         }
       } else {
-        // Si la respuesta no es exitosa, imprime el mensaje de error del servidor y evita la navegación
         print("Error de autenticación: ${response.body}");
 
-        // Mostrar SnackBar en la parte inferior de la pantalla
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Hubo un problema al procesar la solicitud'),
             backgroundColor: Colors.red,
           ),
         );
-        // No realizar la navegación a la pantalla de inicio
       }
     } catch (e) {
       // Captura y maneja cualquier excepción durante la solicitud y evita la navegación
       print('Excepción durante la solicitud HTTP: $e');
 
-      // Mostrar SnackBar en la parte inferior de la pantalla
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Hubo un problema al procesar la solicitud'),
           backgroundColor: Colors.red,
         ),
       );
-
-      // No realizar la navegación a la pantalla de inicio
     }
   }
 }

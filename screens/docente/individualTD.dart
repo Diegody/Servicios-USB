@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../../globals.dart';
 import 'package:servicios/screens/docente/sesionTD.dart';
 
 class IndividualTutoriaScreen extends StatefulWidget {
@@ -52,11 +51,8 @@ class _IndividualTutoriaScreenState extends State<IndividualTutoriaScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => SesionTDScreenD(
-          rowData: {
-            'CICLO': ciclo,
-            'DOCUMENTO': documento,
-            'DOC_DOC': globalCodigoDocente
-          },
+          ciclo: ciclo,
+          documento: documento,
         ),
       ),
     );
