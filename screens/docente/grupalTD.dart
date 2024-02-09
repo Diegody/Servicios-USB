@@ -25,9 +25,7 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
       setState(() {
         _data = List<Map<String, dynamic>>.from(json.decode(response.body));
       });
-    } else {
-      // Handle error
-    }
+    } else {}
   }
 
   @override
