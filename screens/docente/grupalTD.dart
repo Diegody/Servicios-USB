@@ -8,6 +8,7 @@ class GrupalTutoriaScreen extends StatefulWidget {
 }
 
 class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
+  // ignore: unused_field
   List<Map<String, dynamic>> _data = [];
 
   @override
