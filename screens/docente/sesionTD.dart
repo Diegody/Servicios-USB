@@ -23,13 +23,14 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
   String _searchText = '';
   bool _mostrarFormulario = false;
 
-  // Variables:
-  final TextEditingController _numeroSesionController = TextEditingController();
+  int? _numeroSesion;
+  TextEditingController _numeroSesionController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     fetchSessionDetails(widget.ciclo, widget.documento);
+    _fetchNextSessionNumber(widget.ciclo, widget.documento);
   }
 
   Future<void> fetchSessionDetails(String ciclo, String documento) async {
@@ -66,6 +67,42 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
         _isLoading = false;
       });
       throw Exception('Failed to load session details');
+    }
+  }
+
+  Future<void> _fetchNextSessionNumber(String ciclo, String documento) async {
+    try {
+      final response = await http.post(
+        Uri.parse(
+            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/NumeroSesion.php'),
+        body: {
+          'CICLO': ciclo,
+          'DOC_EST': documento,
+          'DOC_DOC': globalCodigoDocente
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        try {
+          final sessionNumber = int.parse(data[0]['SESION']);
+          setState(() {
+            _numeroSesion = sessionNumber;
+            _numeroSesionController.text = _numeroSesion.toString();
+            _isLoading = false;
+          });
+        } catch (e) {
+          throw Exception('Failed to parse session number: $e');
+        }
+      } else {
+        throw Exception('Failed to load next session number');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -125,6 +162,8 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                 SizedBox(height: 20),
                 // Campo para el número de sesión
                 TextFormField(
+                  controller: _numeroSesionController,
+                  enabled: false,
                   decoration: InputDecoration(
                     labelText: 'Número de sesión',
                     border: OutlineInputBorder(),
