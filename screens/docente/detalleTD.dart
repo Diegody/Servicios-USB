@@ -54,12 +54,13 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
               jsonData.map((item) => Map<String, dynamic>.from(item)).toList());
           _isLoading = false;
         });
+        print('Datos de la sesión en DetalleTD: $_sessionDetails');
       } else {
         setState(() {
           _isLoading = false;
         });
       }
-      print('Respuesta: ${response.body}');
+      print('Respuesta DetalleTD: ${response.body}');
     } else {
       setState(() {
         _isLoading = false;
@@ -96,7 +97,9 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
       ),
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+              ),
             )
           : _sessionDetails.isEmpty
               ? Center(
@@ -126,7 +129,35 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                   ),
                 )
               : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Column(
+                      children: [
+                        if (_sessionDetails.isNotEmpty &&
+                            _sessionDetails[0]['SESION'] != null &&
+                            _sessionDetails[0]['CURSO'] != null)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Sesión ${_sessionDetails[0]['SESION']} del curso de ${_sessionDetails[0]['CURSO']}',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Nombre del estudiante ${_sessionDetails[0]['NOMBREESTUDIANTE']}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
@@ -143,18 +174,20 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Lógica para crear sesión de tutoría
-                      },
-                      child: Text(
-                        'Crear detalle',
-                        style: TextStyle(
-                          color: Colors.black,
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Lógica para crear sesión de tutoría
+                        },
+                        child: Text(
+                          'Crear detalle',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.orange,
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.orange,
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),

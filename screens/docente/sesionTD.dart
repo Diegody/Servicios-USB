@@ -21,6 +21,10 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
   List<Map<String, dynamic>> _sessionDetails = [];
   bool _isLoading = true;
   String _searchText = '';
+  bool _mostrarFormulario = false;
+
+  // Variables:
+  final TextEditingController _numeroSesionController = TextEditingController();
 
   @override
   void initState() {
@@ -101,6 +105,227 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
     );
   }
 
+  void _showSesionForm() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Asignación de tutorías',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Campo para el número de sesión
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Número de sesión',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Campo para el periodo académico
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Periodo académico',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Campo para el tipo de tutoría
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Tipo de tutoría',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Campo para la facultad (dropdown)
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: 'Facultad',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    DropdownMenuItem<String>(
+                      value: 'Facultad 1',
+                      child: Text('Facultad 1'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'Facultad 2',
+                      child: Text('Facultad 2'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'Facultad 3',
+                      child: Text('Facultad 3'),
+                    ),
+                    // Agrega más elementos según sea necesario
+                  ],
+                  onChanged: (value) {
+                    // Lógica para manejar la selección de la facultad
+                  },
+                ),
+                SizedBox(height: 20),
+                // Campo para el programa (dropdown)
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: 'Programa',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    DropdownMenuItem<String>(
+                      value: 'Programa 1',
+                      child: Text('Programa 1'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'Programa 2',
+                      child: Text('Programa 2'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'Programa 3',
+                      child: Text('Programa 3'),
+                    ),
+                    // Agrega más elementos según sea necesario
+                  ],
+                  onChanged: (value) {
+                    // Lógica para manejar la selección del programa
+                  },
+                ),
+                SizedBox(height: 20),
+                // Campo para el nombre del curso (dropdown)
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: 'Nombre del curso',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    DropdownMenuItem<String>(
+                      value: 'Curso 1',
+                      child: Text('Curso 1'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'Curso 2',
+                      child: Text('Curso 2'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'Curso 3',
+                      child: Text('Curso 3'),
+                    ),
+                    // Agrega más elementos según sea necesario
+                  ],
+                  onChanged: (value) {
+                    // Lógica para manejar la selección del curso
+                  },
+                ),
+                SizedBox(height: 20),
+                // Campo para el profesor responsable
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Profesor responsable',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Campo para la temática
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Temática',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Campo para la modalidad (dropdown)
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: 'Modalidad',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    DropdownMenuItem<String>(
+                      value: 'Modalidad 1',
+                      child: Text('Modalidad 1'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'Modalidad 2',
+                      child: Text('Modalidad 2'),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: 'Modalidad 3',
+                      child: Text('Modalidad 3'),
+                    ),
+                    // Agrega más elementos según sea necesario
+                  ],
+                  onChanged: (value) {
+                    // Lógica para manejar la selección de la modalidad
+                  },
+                ),
+                SizedBox(height: 20),
+                // Campo para la metodología
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Metodología',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Campo para la fecha de la tutoría (date picker)
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Fecha de la tutoría',
+                    border: OutlineInputBorder(),
+                  ),
+                  readOnly: true,
+                  onTap: () {
+                    // Lógica para abrir el selector de fecha
+                  },
+                ),
+                SizedBox(height: 20),
+                // Campo para el lugar
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Lugar',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Campo para el documento
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Documento',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Botón para crear la tutoría
+                ElevatedButton(
+                  onPressed: () {
+                    // Lógica para crear la tutoría
+                  },
+                  child: Text(
+                    'Crear tutoría',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.orange,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +343,9 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
       ),
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+              ),
             )
           : _sessionDetails.isEmpty
               ? Center(
@@ -132,7 +359,10 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          // Lógica para crear sesión de tutoría
+                          setState(() {
+                            // Establece el estado para mostrar el formulario
+                            _mostrarFormulario = true;
+                          });
                         },
                         child: Text(
                           'Crear sesión de tutoría',
@@ -165,18 +395,21 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Lógica para crear sesión de tutoría
-                      },
-                      child: Text(
-                        'Crear sesión de tutoría',
-                        style: TextStyle(
-                          color: Colors.black,
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Muestra el formulario modal para crear una nueva sesión de tutoría
+                          _showSesionForm();
+                        },
+                        child: Text(
+                          'Crear sesión de tutoría',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.orange,
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.orange,
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -260,6 +493,18 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                     ),
                   ],
                 ),
+      floatingActionButton: _mostrarFormulario
+          ? FloatingActionButton(
+              onPressed: () {
+                // Ocultar el formulario cuando se presiona el botón de cerrar
+                setState(() {
+                  _mostrarFormulario = false;
+                });
+              },
+              child: Icon(Icons.close),
+              backgroundColor: Colors.red,
+            )
+          : null,
     );
   }
 }
