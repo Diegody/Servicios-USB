@@ -2,22 +2,23 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:servicios/globals.dart';
-import 'package:servicios/screens/docente/detalleTD.dart';
 
-class SesionTDScreenD extends StatefulWidget {
+class DetalleTDScreenD extends StatefulWidget {
   final String ciclo;
   final String documento;
+  final String sesion;
 
-  const SesionTDScreenD({
+  const DetalleTDScreenD({
     required this.ciclo,
     required this.documento,
+    required this.sesion,
   });
 
   @override
-  _SesionTDScreenDState createState() => _SesionTDScreenDState();
+  _DetalleTDScreenDState createState() => _DetalleTDScreenDState();
 }
 
-class _SesionTDScreenDState extends State<SesionTDScreenD> {
+class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
   List<Map<String, dynamic>> _sessionDetails = [];
   bool _isLoading = true;
   String _searchText = '';
@@ -25,21 +26,23 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
   @override
   void initState() {
     super.initState();
-    fetchSessionDetails(widget.ciclo, widget.documento);
+    fetchSessionDetails(widget.ciclo, widget.documento, widget.sesion);
   }
 
-  Future<void> fetchSessionDetails(String ciclo, String documento) async {
+  Future<void> fetchSessionDetails(
+      String ciclo, String documento, String sesion) async {
     setState(() {
       _isLoading = true;
     });
 
     final response = await http.post(
       Uri.parse(
-          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/EstudianteConTutoria.php'),
+          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/DetalleTutoria.php'),
       body: {
         'CICLO': ciclo,
         'DOC_EST': documento,
-        'DOC_DOC': globalCodigoDocente
+        'SESION': sesion,
+        'DOC_DOC': globalCodigoDocente,
       },
     );
 
@@ -65,18 +68,6 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
     }
   }
 
-  void _navigateToDetalleScreen(String sesion) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => DetalleTDScreenD(
-          ciclo: widget.ciclo,
-          documento: widget.documento,
-          sesion: sesion,
-        ),
-      ),
-    );
-  }
-
   List<Map<String, dynamic>> _searchResults() {
     if (_searchText.isEmpty) {
       return _sessionDetails;
@@ -88,24 +79,11 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
     }
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles de la Sesión'),
+        title: Text('Detallado'),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -126,7 +104,7 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'No hay ninguna sesión para el estudiante',
+                        'No hay ningún detalle para el estudiante',
                         style: TextStyle(fontSize: 18),
                       ),
                       SizedBox(height: 20),
@@ -135,7 +113,7 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                           // Lógica para crear sesión de tutoría
                         },
                         child: Text(
-                          'Crear sesión de tutoría',
+                          'Crear detalle',
                           style: TextStyle(
                             color: Colors.black,
                           ),
@@ -153,7 +131,7 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         decoration: InputDecoration(
-                          labelText: 'Buscar tutorías',
+                          labelText: 'Buscar',
                           prefixIcon: Icon(Icons.search),
                           border: OutlineInputBorder(),
                         ),
@@ -170,7 +148,7 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                         // Lógica para crear sesión de tutoría
                       },
                       child: Text(
-                        'Crear sesión de tutoría',
+                        'Crear detalle',
                         style: TextStyle(
                           color: Colors.black,
                         ),
@@ -180,7 +158,6 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    _buildSectionTitle('Tutorías disponibles'),
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -194,62 +171,41 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                           ),
                           child: DataTable(
                             columns: [
-                              DataColumn(label: Text('DETALLE')),
-                              DataColumn(label: Text('SESION')),
-                              DataColumn(label: Text('PERIODO ACADEMICO')),
-                              DataColumn(label: Text('TIPO TUTORIA')),
-                              DataColumn(label: Text('FACULTAD')),
-                              DataColumn(label: Text('PROGRAMA')),
-                              DataColumn(label: Text('NOMBRE CURSO')),
-                              DataColumn(label: Text('PROFESOR RESPONSABLE')),
-                              DataColumn(label: Text('TEMATICA')),
-                              DataColumn(label: Text('MODALIDAD')),
-                              DataColumn(label: Text('METODOLOGIA')),
-                              DataColumn(label: Text('FECHATUTORIA')),
-                              DataColumn(label: Text('LUGAR')),
+                              DataColumn(label: Text('NOMBRES COMPLETOS')),
                               DataColumn(label: Text('DOCUMENTO')),
+                              DataColumn(label: Text('CÓDIGO')),
+                              DataColumn(label: Text('ACTIVIDAD REALIZADA')),
+                              DataColumn(label: Text('ACUERDOS Y COMPROMISOS')),
+                              DataColumn(label: Text('INICIO TUTORÍA')),
+                              DataColumn(label: Text('FIN TUTORÍA')),
+                              DataColumn(label: Text('ASISTENCIA')),
+                              DataColumn(label: Text('CALIFICACIÓN HECHA')),
                             ],
                             rows: _searchResults()
                                 .map(
                                   (session) => DataRow(
                                     cells: [
-                                      DataCell(
-                                        IconButton(
-                                          icon: Icon(Icons.info),
-                                          onPressed: () {
-                                            _navigateToDetalleScreen(
-                                                session['NUMEROSESION']
-                                                    .toString());
-                                          },
-                                        ),
-                                      ),
-                                      DataCell(Text(
-                                          session['NUMEROSESION'].toString())),
-                                      DataCell(Text(session['PERIODOACADEMICO']
+                                      DataCell(Text(session['NOMBREESTUDIANTE']
                                           .toString())),
-                                      DataCell(Text(
-                                          session['TIPOTUTORIA'].toString())),
-                                      DataCell(
-                                          Text(session['FACULTAD'].toString())),
-                                      DataCell(
-                                          Text(session['PROGRAMA'].toString())),
-                                      DataCell(Text(session['NOMBREDELCURSO']
-                                          .toString())),
-                                      DataCell(Text(
-                                          session['PROFESORRESPONSABLE']
-                                              .toString())),
-                                      DataCell(
-                                          Text(session['TEMATICA'].toString())),
-                                      DataCell(Text(
-                                          session['MODALIDAD'].toString())),
-                                      DataCell(Text(
-                                          session['METODOLOGIA'].toString())),
-                                      DataCell(Text(
-                                          session['FECHATUTORIA'].toString())),
-                                      DataCell(
-                                          Text(session['LUGAR'].toString())),
                                       DataCell(Text(
                                           session['DOCUMENTO'].toString())),
+                                      DataCell(
+                                          Text(session['CODIGO'].toString())),
+                                      DataCell(Text(
+                                          session['ACTIVIDADREALIZADA']
+                                              .toString())),
+                                      DataCell(Text(
+                                          session['ACUERDOSYCOMPROMISOS']
+                                              .toString())),
+                                      DataCell(Text(session['INICIO_TUTORIA']
+                                          .toString())),
+                                      DataCell(Text(
+                                          session['FINAL_TUTORIA'].toString())),
+                                      DataCell(Text(
+                                          session['ASISTENCIA'].toString())),
+                                      DataCell(Text(
+                                          session['CALIFICACIONESTUDIANTE']
+                                              .toString())),
                                     ],
                                   ),
                                 )

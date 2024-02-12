@@ -90,8 +90,9 @@ class _HorarioDScreenDState extends State<HorarioDScreenD> {
               controller: _searchController,
               onChanged: _filterHorarioData,
               decoration: InputDecoration(
-                labelText: 'Buscar',
+                labelText: 'Buscar clase',
                 prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
               ),
             ),
           ),

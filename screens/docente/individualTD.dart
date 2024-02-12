@@ -76,16 +76,16 @@ class _IndividualTutoriaScreenState extends State<IndividualTutoriaScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              onChanged: _filterData,
-              decoration: InputDecoration(
-                labelText: 'Buscar',
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-          ),
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _searchController,
+                onChanged: _filterData,
+                decoration: InputDecoration(
+                  labelText: 'Buscar estudiante',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(),
+                ),
+              )),
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
