@@ -25,12 +25,95 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
 
   int? _numeroSesion;
   TextEditingController _numeroSesionController = TextEditingController();
+  TextEditingController _cicloController = TextEditingController();
+  final TextEditingController _tipoTutoriaController = TextEditingController();
+
+  String selectedOpcionFacultad = '';
+  String selectedOpcionPrograma = '';
+  String selectedOpcionCurso = '';
+  List<Map<String, dynamic>> _opcionFacultadList = [];
+  List<Map<String, dynamic>> _opcionProgramaAcademicoList = [];
+  List<Map<String, dynamic>> _opcionCursoList = [];
 
   @override
   void initState() {
     super.initState();
     fetchSessionDetails(widget.ciclo, widget.documento);
     _fetchNextSessionNumber(widget.ciclo, widget.documento);
+    _cicloController.text = widget.ciclo;
+    _loadOpcFacultad();
+    // Mover la carga de programas académicos aquí
+    _loadOpcProgramaAcademico();
+    _loadOpcCurso();
+  }
+
+  Future<void> _loadOpcFacultad() async {
+    try {
+      List<Map<String, dynamic>> opcFacultadData = await getOpcFacultad();
+
+      setState(() {
+        _opcionFacultadList = opcFacultadData;
+
+        if (_opcionFacultadList.isNotEmpty) {
+          selectedOpcionFacultad = _opcionFacultadList[0]['id'];
+          print('Opción seleccionada el el DropDown: $selectedOpcionFacultad');
+        } else {
+          selectedOpcionFacultad = 'Sin opciones disponibles';
+        }
+      });
+    } catch (e) {
+      setState(() {
+        _opcionFacultadList = [];
+        selectedOpcionFacultad = 'Error al cargar opciones';
+      });
+      print('Error al cargar opciones de facultad: $e');
+    }
+  }
+
+  Future<void> _loadOpcProgramaAcademico() async {
+    try {
+      List<Map<String, dynamic>> opcProgramaData =
+          await getOpcPrograma(selectedOpcionFacultad);
+
+      setState(() {
+        _opcionProgramaAcademicoList = opcProgramaData;
+        if (_opcionProgramaAcademicoList.isNotEmpty) {
+          selectedOpcionPrograma = _opcionProgramaAcademicoList[0]['id'];
+        } else {
+          selectedOpcionPrograma = 'Sin opciones disponibles';
+        }
+      });
+    } catch (e) {
+      setState(() {
+        _opcionProgramaAcademicoList = [];
+        selectedOpcionPrograma = 'Error al cargar opciones';
+      });
+      print('Error al cargar opciones de programas: $e');
+    }
+  }
+
+  Future<void> _loadOpcCurso() async {
+    try {
+      List<Map<String, dynamic>> opcCursoData =
+          await getOpcCurso(selectedOpcionPrograma);
+
+      setState(() {
+        _opcionCursoList = opcCursoData;
+
+        if (_opcionCursoList.isNotEmpty) {
+          selectedOpcionCurso = _opcionCursoList[0]['id'];
+          print('Opción seleccionada el el DropDown: $selectedOpcionCurso');
+        } else {
+          selectedOpcionCurso = 'Sin opciones disponibles';
+        }
+      });
+    } catch (e) {
+      setState(() {
+        _opcionCursoList = [];
+        selectedOpcionCurso = 'Error al cargar opciones';
+      });
+      print('Error al cargar opciones de cursos: $e');
+    }
   }
 
   Future<void> fetchSessionDetails(String ciclo, String documento) async {
@@ -55,6 +138,11 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
           _sessionDetails = List<Map<String, dynamic>>.from(
               jsonData.map((item) => Map<String, dynamic>.from(item)).toList());
           _isLoading = false;
+
+          if (_sessionDetails.isNotEmpty) {
+            _tipoTutoriaController.text =
+                _sessionDetails[0]['TIPOTUTORIA'].toString();
+          }
         });
       } else {
         setState(() {
@@ -84,15 +172,15 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        try {
+        if (data is List && data.isNotEmpty && data[0]['SESION'] != null) {
           final sessionNumber = int.parse(data[0]['SESION']);
           setState(() {
             _numeroSesion = sessionNumber;
             _numeroSesionController.text = _numeroSesion.toString();
             _isLoading = false;
           });
-        } catch (e) {
-          throw Exception('Failed to parse session number: $e');
+        } else {
+          print('No hay tutorías disponibles para este estudiante.');
         }
       } else {
         throw Exception('Failed to load next session number');
@@ -103,6 +191,73 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getOpcFacultad() async {
+    final response = await http.post(
+      Uri.parse(
+          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/OpcionFacultad.php'),
+    );
+
+    if (response.statusCode == 200) {
+      print('Cuerpo de la respuesta (Opciones de facultad): ${response.body}');
+
+      List<dynamic> opcFincDataList = json.decode(response.body);
+
+      return opcFincDataList
+          .map<Map<String, dynamic>>((opc) => {
+                'text': opc['FACULTAD'].toString(),
+                'id': opc['FACULTAD2'].toString(),
+              })
+          .toList();
+    } else {
+      throw Exception('Error al cargar todas las opciones');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getOpcPrograma(String programa) async {
+    final response = await http.post(
+        Uri.parse(
+            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/OpcionProgramaAcademico.php'),
+        body: {'PROG_ACADEMICO': programa});
+
+    if (response.statusCode == 200) {
+      print(
+          'Cuerpo de la respuesta (Opciones de programa academico): ${response.body}');
+
+      List<dynamic> opcFincDataList = json.decode(response.body);
+
+      return opcFincDataList
+          .map<Map<String, dynamic>>((opc) => {
+                'text': opc['PROGRAMA'].toString(),
+                'id': opc['PROGRAMA2'].toString(),
+              })
+          .toList();
+    } else {
+      throw Exception('Error al cargar todas las opciones');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getOpcCurso(String curso) async {
+    final response = await http.post(
+        Uri.parse(
+            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/OpcionCurso.php'),
+        body: {'CURSO': curso});
+
+    if (response.statusCode == 200) {
+      print('Cuerpo de la respuesta (Opciones de curso): ${response.body}');
+
+      List<dynamic> opcFincDataList = json.decode(response.body);
+
+      return opcFincDataList
+          .map<Map<String, dynamic>>((opc) => {
+                'text': opc['MATERIA'].toString(),
+                'id': opc['MATERIA2'].toString(),
+              })
+          .toList();
+    } else {
+      throw Exception('Error al cargar todas las opciones');
     }
   }
 
@@ -142,6 +297,122 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
     );
   }
 
+  Widget _buildDropdownFieldWithFacultad(
+      String label, List<String> opciones, String identifier) {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(),
+      ),
+      items: _opcionFacultadList.map((map) {
+        return DropdownMenuItem<String>(
+          value: map['id'],
+          child: Text(map['text']),
+        );
+      }).toList(),
+      value: selectedOpcionFacultad.isNotEmpty ? selectedOpcionFacultad : null,
+      onChanged: (String? value) async {
+        if (value != null) {
+          setState(() {
+            selectedOpcionFacultad = value;
+            selectedOpcionPrograma = '';
+            _opcionProgramaAcademicoList.clear();
+          });
+          _startLoadingAnimation();
+          try {
+            // Llamar nuevamente a _loadOpcProgramaAcademico() aquí
+            await _loadOpcProgramaAcademico();
+          } finally {
+            _stopLoadingAnimation();
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildDropdownFieldWithPrograma(
+      String label, List<String> opciones, String identifier) {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(),
+      ),
+      items: _opcionProgramaAcademicoList.map((map) {
+        return DropdownMenuItem<String>(
+          value: map['id'],
+          child: Container(
+            width: 300,
+            child: Text(
+              map['text'],
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        );
+      }).toList(),
+      value: selectedOpcionPrograma,
+      onChanged: (String? value) async {
+        if (value != null) {
+          setState(() {
+            selectedOpcionPrograma = value;
+          });
+          _startLoadingAnimation();
+          try {
+            await _loadOpcCurso();
+          } finally {
+            _stopLoadingAnimation();
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildDropdownFieldWithCurso(
+      String label, List<String> opciones, String identifier) {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(),
+      ),
+      items: _opcionCursoList.map((map) {
+        return DropdownMenuItem<String>(
+          value: map['id'],
+          child: Text(map['text']),
+        );
+      }).toList(),
+      value: selectedOpcionCurso,
+      validator: (value) {
+        if (opciones.isEmpty || value == null || value.isEmpty) {
+          return 'Por favor, seleccione $label';
+        }
+        return null;
+      },
+      onChanged: (String? value) {
+        if (value != null) {
+          setState(() {
+            selectedOpcionCurso = value;
+          });
+        }
+      },
+    );
+  }
+
+  void _startLoadingAnimation() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+          ),
+        );
+      },
+    );
+  }
+
+  void _stopLoadingAnimation() {
+    Navigator.of(context).pop(); // Cierra el diálogo de carga
+  }
+
   void _showSesionForm() {
     showModalBottomSheet(
       context: context,
@@ -153,7 +424,7 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Asignación de tutorías',
+                  'Asignación de tutoría',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -172,6 +443,8 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                 SizedBox(height: 20),
                 // Campo para el periodo académico
                 TextFormField(
+                  controller: _cicloController,
+                  enabled: false,
                   decoration: InputDecoration(
                     labelText: 'Periodo académico',
                     border: OutlineInputBorder(),
@@ -180,88 +453,36 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                 SizedBox(height: 20),
                 // Campo para el tipo de tutoría
                 TextFormField(
+                  controller: _tipoTutoriaController,
+                  enabled: false,
                   decoration: InputDecoration(
                     labelText: 'Tipo de tutoría',
                     border: OutlineInputBorder(),
                   ),
                 ),
                 SizedBox(height: 20),
-                // Campo para la facultad (dropdown)
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: 'Facultad',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: [
-                    DropdownMenuItem<String>(
-                      value: 'Facultad 1',
-                      child: Text('Facultad 1'),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: 'Facultad 2',
-                      child: Text('Facultad 2'),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: 'Facultad 3',
-                      child: Text('Facultad 3'),
-                    ),
-                    // Agrega más elementos según sea necesario
-                  ],
-                  onChanged: (value) {
-                    // Lógica para manejar la selección de la facultad
-                  },
+                _buildDropdownFieldWithFacultad(
+                  'Facultad',
+                  _opcionFacultadList
+                      .map((map) => map['text'].toString())
+                      .toList(),
+                  selectedOpcionFacultad,
                 ),
                 SizedBox(height: 20),
-                // Campo para el programa (dropdown)
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: 'Programa',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: [
-                    DropdownMenuItem<String>(
-                      value: 'Programa 1',
-                      child: Text('Programa 1'),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: 'Programa 2',
-                      child: Text('Programa 2'),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: 'Programa 3',
-                      child: Text('Programa 3'),
-                    ),
-                    // Agrega más elementos según sea necesario
-                  ],
-                  onChanged: (value) {
-                    // Lógica para manejar la selección del programa
-                  },
+                _buildDropdownFieldWithPrograma(
+                  'Programa académico',
+                  _opcionProgramaAcademicoList
+                      .map((map) => map['text'].toString())
+                      .toList(),
+                  selectedOpcionPrograma,
                 ),
                 SizedBox(height: 20),
-                // Campo para el nombre del curso (dropdown)
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: 'Nombre del curso',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: [
-                    DropdownMenuItem<String>(
-                      value: 'Curso 1',
-                      child: Text('Curso 1'),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: 'Curso 2',
-                      child: Text('Curso 2'),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: 'Curso 3',
-                      child: Text('Curso 3'),
-                    ),
-                    // Agrega más elementos según sea necesario
-                  ],
-                  onChanged: (value) {
-                    // Lógica para manejar la selección del curso
-                  },
+                _buildDropdownFieldWithCurso(
+                  'Curso',
+                  _opcionCursoList
+                      .map((map) => map['text'].toString())
+                      .toList(),
+                  selectedOpcionCurso,
                 ),
                 SizedBox(height: 20),
                 // Campo para el profesor responsable

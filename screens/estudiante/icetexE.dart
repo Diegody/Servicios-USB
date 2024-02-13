@@ -128,7 +128,7 @@ class _IcetexEScreenEState extends State<IcetexEScreenE> {
         _opcionNivelAcademicoList = [];
         selectedOpcionLevel = 'Error al cargar opciones';
       });
-      print('Error al cargar opciones de financiación: $e');
+      print('Error al cargar opciones de nivel académico: $e');
     }
   }
 
@@ -153,7 +153,7 @@ class _IcetexEScreenEState extends State<IcetexEScreenE> {
         _opcionProgramaAcademicoList = [];
         selectedOpcionPrograma = 'Error al cargar opciones';
       });
-      print('Error al cargar opciones de financiación: $e');
+      print('Error al cargar opciones de programa académico: $e');
       return [];
     }
   }
@@ -177,7 +177,7 @@ class _IcetexEScreenEState extends State<IcetexEScreenE> {
         _opcionCicloList = [];
         selectedOpcionCiclo = 'Error al cargar opciones';
       });
-      print('Error al cargar opciones de financiación: $e');
+      print('Error al cargar opciones de ciclo: $e');
     }
   }
 
