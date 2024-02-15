@@ -24,9 +24,26 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
   bool _isLoading = true;
 
   int? _numeroSesion;
+  late String profesor;
   TextEditingController _numeroSesionController = TextEditingController();
   TextEditingController _cicloController = TextEditingController();
-  final TextEditingController _tipoTutoriaController = TextEditingController();
+  final TextEditingController _tipoTutoriaController =
+      TextEditingController(text: 'Tutoría académica');
+  final TextEditingController _docenteEncargadoController =
+      TextEditingController();
+  final TextEditingController? _tematicaTutoriaController =
+      TextEditingController();
+  final TextEditingController _modalidadController = TextEditingController();
+  final TextEditingController _metodologiaController =
+      TextEditingController(text: 'Individual');
+  final TextEditingController? _fechaTutoriaController =
+      TextEditingController();
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+  final TextEditingController? _lugarTutoriaController =
+      TextEditingController();
+  TextEditingController _docmuentoEstudianteController =
+      TextEditingController();
 
   String selectedOpcionFacultad = '';
   String selectedOpcionPrograma = '';
@@ -40,10 +57,11 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
     super.initState();
     _fetchNextSessionNumber(widget.ciclo, widget.documento);
     _cicloController.text = widget.ciclo;
+    _docmuentoEstudianteController.text = widget.documento;
     _loadOpcFacultad();
-    // Mover la carga de programas académicos aquí
     _loadOpcProgramaAcademico();
     _loadOpcCurso();
+    _profesorEncargado();
   }
 
   Future<void> _loadOpcFacultad() async {
@@ -115,17 +133,63 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
     }
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-      ),
+  Future<void> _selectDate(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final TextStyle? style = theme.textTheme.subtitle1;
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: colorScheme.copyWith(
+              primary: Colors.orange,
+              onPrimary: Colors.white,
+            ),
+            textTheme: theme.textTheme.copyWith(
+              subtitle1: style?.copyWith(color: Colors.orange),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        _selectTime(context);
+      });
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: colorScheme.copyWith(
+              primary: Colors.orange, // Color de fondo del selector de hora
+              onPrimary: Colors.white, // Color de texto del selector de hora
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != selectedTime)
+      setState(() {
+        selectedTime = picked;
+        _fechaTutoriaController!.text =
+            '${selectedDate.day}/${selectedDate.month}/${selectedDate.year} ${selectedTime.hour}:${selectedTime.minute}';
+      });
   }
 
   Widget _buildDropdownFieldWithFacultad(
@@ -309,7 +373,6 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                 ),
               ),
               SizedBox(height: 20),
-              // Campo para el tipo de tutoría
               TextFormField(
                 controller: _tipoTutoriaController,
                 enabled: false,
@@ -341,23 +404,23 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                 selectedOpcionCurso,
               ),
               SizedBox(height: 20),
-              // Campo para el profesor responsable
               TextFormField(
+                controller: _docenteEncargadoController,
+                enabled: false,
                 decoration: InputDecoration(
                   labelText: 'Profesor responsable',
                   border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 20),
-              // Campo para la temática
               TextFormField(
+                controller: _tematicaTutoriaController,
                 decoration: InputDecoration(
                   labelText: 'Temática',
                   border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 20),
-              // Campo para la modalidad (dropdown)
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   labelText: 'Modalidad',
@@ -365,54 +428,54 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                 ),
                 items: [
                   DropdownMenuItem<String>(
-                    value: 'Modalidad 1',
-                    child: Text('Modalidad 1'),
+                    value: 'Presencial',
+                    child: Text('Presencial'),
                   ),
                   DropdownMenuItem<String>(
-                    value: 'Modalidad 2',
-                    child: Text('Modalidad 2'),
+                    value: 'Virtual',
+                    child: Text('Virtual'),
                   ),
-                  DropdownMenuItem<String>(
-                    value: 'Modalidad 3',
-                    child: Text('Modalidad 3'),
-                  ),
-                  // Agrega más elementos según sea necesario
                 ],
                 onChanged: (value) {
-                  // Lógica para manejar la selección de la modalidad
+                  _modalidadController.text = value!;
                 },
               ),
+
               SizedBox(height: 20),
               // Campo para la metodología
               TextFormField(
+                controller: _metodologiaController,
+                enabled: false,
                 decoration: InputDecoration(
                   labelText: 'Metodología',
                   border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 20),
-              // Campo para la fecha de la tutoría (date picker)
               TextFormField(
+                controller: _fechaTutoriaController,
                 decoration: InputDecoration(
                   labelText: 'Fecha de la tutoría',
                   border: OutlineInputBorder(),
                 ),
                 readOnly: true,
                 onTap: () {
-                  // Lógica para abrir el selector de fecha
+                  _selectDate(context);
                 },
               ),
               SizedBox(height: 20),
-              // Campo para el lugar
               TextFormField(
+                controller: _lugarTutoriaController,
                 decoration: InputDecoration(
-                  labelText: 'Lugar',
+                  labelText: 'Lugar de la tutoría',
                   border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 20),
               // Campo para el documento
               TextFormField(
+                controller: _docmuentoEstudianteController,
+                enabled: false,
                 decoration: InputDecoration(
                   labelText: 'Documento',
                   border: OutlineInputBorder(),
@@ -441,48 +504,6 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
     );
   }
 
-  Future<void> fetchSessionDetails(String ciclo, String documento) async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final response = await http.post(
-      Uri.parse(
-          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/EstudianteConTutoria.php'),
-      body: {
-        'CICLO': ciclo,
-        'DOC_EST': documento,
-        'DOC_DOC': globalCodigoDocente
-      },
-    );
-
-    if (response.statusCode == 200) {
-      dynamic jsonData = json.decode(response.body);
-      if (jsonData is List) {
-        setState(() {
-          _sessionDetails = List<Map<String, dynamic>>.from(
-              jsonData.map((item) => Map<String, dynamic>.from(item)).toList());
-          _isLoading = false;
-
-          if (_sessionDetails.isNotEmpty) {
-            _tipoTutoriaController.text =
-                _sessionDetails[0]['TIPOTUTORIA'].toString();
-          }
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-      print('Respuesta: ${response.body}');
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-      throw Exception('Failed to load session details');
-    }
-  }
-
   Future<void> _fetchNextSessionNumber(String ciclo, String documento) async {
     try {
       final response = await http.post(
@@ -505,15 +526,20 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
             _isLoading = false;
           });
         } else {
-          print('No hay tutorías disponibles para este estudiante.');
+          setState(() {
+            _numeroSesion = 1;
+            _numeroSesionController.text = _numeroSesion.toString();
+            _isLoading = false;
+          });
         }
       } else {
         throw Exception('Failed to load next session number');
       }
     } catch (error) {
       print(error);
-    } finally {
       setState(() {
+        _numeroSesion = 1;
+        _numeroSesionController.text = _numeroSesion.toString();
         _isLoading = false;
       });
     }
@@ -583,6 +609,34 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
           .toList();
     } else {
       throw Exception('Error al cargar todas las opciones');
+    }
+  }
+
+  Future<void> _profesorEncargado() async {
+    try {
+      final response = await http.post(
+        Uri.parse(
+            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/ProfesorEncargado.php'),
+        body: {'DOC_DOC': globalCodigoDocente},
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data is List && data.isNotEmpty && data[0]['PROFE'] != null) {
+          String nombreProfesor = data[0]['PROFE'].toString();
+          _docenteEncargadoController.text = nombreProfesor;
+        } else {
+          print('No hay profesores disponibles para este estudiante.');
+        }
+      } else {
+        throw Exception('Failed to load next session number');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 }

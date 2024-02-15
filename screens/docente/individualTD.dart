@@ -83,6 +83,7 @@ class _IndividualTutoriaScreenState extends State<IndividualTutoriaScreen> {
               decoration: InputDecoration(
                 labelText: 'Buscar',
                 prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
               ),
             ),
           ),
