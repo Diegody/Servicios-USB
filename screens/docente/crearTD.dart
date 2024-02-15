@@ -62,6 +62,7 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
     _loadOpcProgramaAcademico();
     _loadOpcCurso();
     _profesorEncargado();
+    enviarSolicitud();
   }
 
   Future<void> _loadOpcFacultad() async {
@@ -482,20 +483,31 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                 ),
               ),
               SizedBox(height: 20),
-              // Botón para crear la tutoría
               ElevatedButton(
                 onPressed: () {
-                  // Lógica para crear la tutoría
+                  if (_formKey.currentState?.validate() ?? false) {
+                    _stopLoadingAnimation();
+                    enviarSolicitud();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Sesión de tutoría creada y enviada.'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  } else {
+                    _stopLoadingAnimation();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:
+                            Text('No se puedo crear la sesión de tutoría.'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
                 },
-                child: Text(
-                  'Crear tutoría a estudiante',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
-                ),
+                child: Text('Crear tutoría a estudiante',
+                    style: TextStyle(color: Colors.black)),
+                style: ElevatedButton.styleFrom(primary: Colors.orange),
               ),
             ],
           ),
@@ -637,6 +649,50 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  Future<void> enviarSolicitud() async {
+    final url =
+        'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/CrearTutoria.php';
+
+    Map<String, String> datosFormulario = {
+      'NUMEROSESION': _numeroSesionController.text,
+      'PERIODOACADEMICO': _cicloController.text,
+      'TIPOTUTORIA': _tipoTutoriaController.text,
+      'FACULTAD': selectedOpcionFacultad,
+      'PROGRAMA': selectedOpcionPrograma,
+      'NOMBREDELCURSO': selectedOpcionCurso,
+      'PROFESORRESPONSABLE': _docenteEncargadoController.text,
+      'TEMATICA': _tematicaTutoriaController?.text ?? '',
+      'MODALIDAD': _modalidadController.text,
+      'METODOLOGIA': _metodologiaController.text,
+      'FECHATUTORIA': _fechaTutoriaController!.text,
+      'LUGAR': _lugarTutoriaController!.text,
+      'DOCUMENTO': _docmuentoEstudianteController.text,
+      'DOCUMENTOP': globalCodigoDocente,
+    };
+
+    print('Datos del formulario: $datosFormulario');
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: datosFormulario,
+      );
+
+      if (response.statusCode == 200) {
+        // Procesa la respuesta si es necesario
+        print('Solicitud enviada con éxito: ${response.statusCode}');
+        print('Datos enviados al servidor: $datosFormulario');
+      } else {
+        // Maneja errores de la respuesta
+        print(
+            'Error en la solicitud. Código de estado: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Maneja errores de la conexión
+      print('Error de conexión: $error');
     }
   }
 }
