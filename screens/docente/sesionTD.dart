@@ -76,13 +76,14 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
     }
   }
 
-  void _navigateToDetalleScreen(String sesion) {
+  void _navigateToDetalleScreen(String sesion, String nombreCurso) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => DetalleTDScreenD(
           ciclo: widget.ciclo,
           documento: widget.documento,
           sesion: sesion,
+          nombreCurso: nombreCurso,
         ),
       ),
     );
@@ -247,8 +248,11 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                                           icon: Icon(Icons.info),
                                           onPressed: () {
                                             _navigateToDetalleScreen(
-                                                session['NUMEROSESION']
-                                                    .toString());
+                                              session['NUMEROSESION']
+                                                  .toString(),
+                                              session['NOMBREDELCURSO']
+                                                  .toString(), // Envía el nombre del curso
+                                            );
                                           },
                                         ),
                                       ),

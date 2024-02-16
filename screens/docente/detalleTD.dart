@@ -1,17 +1,21 @@
+// detalleTD.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:servicios/globals.dart';
+import 'package:servicios/screens/docente/crearDD.dart';
 
 class DetalleTDScreenD extends StatefulWidget {
   final String ciclo;
   final String documento;
   final String sesion;
+  final String nombreCurso;
 
   const DetalleTDScreenD({
     required this.ciclo,
     required this.documento,
     required this.sesion,
+    required this.nombreCurso,
   });
 
   @override
@@ -19,6 +23,12 @@ class DetalleTDScreenD extends StatefulWidget {
 }
 
 class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
+  final TextEditingController? _nombreCursoController = TextEditingController();
+  final TextEditingController? _nombreEstudianteController =
+      TextEditingController();
+  final TextEditingController? _codigoEstudianteController =
+      TextEditingController();
+
   List<Map<String, dynamic>> _sessionDetails = [];
   bool _isLoading = true;
   String _searchText = '';
@@ -26,47 +36,11 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
   @override
   void initState() {
     super.initState();
+    _profesorEncargado(widget.documento);
     fetchSessionDetails(widget.ciclo, widget.documento, widget.sesion);
-  }
-
-  Future<void> fetchSessionDetails(
-      String ciclo, String documento, String sesion) async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final response = await http.post(
-      Uri.parse(
-          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/DetalleTutoria.php'),
-      body: {
-        'CICLO': ciclo,
-        'DOC_EST': documento,
-        'SESION': sesion,
-        'DOC_DOC': globalCodigoDocente,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      dynamic jsonData = json.decode(response.body);
-      if (jsonData is List) {
-        setState(() {
-          _sessionDetails = List<Map<String, dynamic>>.from(
-              jsonData.map((item) => Map<String, dynamic>.from(item)).toList());
-          _isLoading = false;
-        });
-        print('Datos de la sesión en DetalleTD: $_sessionDetails');
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-      print('Respuesta DetalleTD: ${response.body}');
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-      throw Exception('Failed to load session details');
-    }
+    _nombreCursoController!.text = widget.nombreCurso;
+    _nombreEstudianteController!.text = ''; // Asigna el valor correspondiente
+    _codigoEstudianteController!.text = '';
   }
 
   List<Map<String, dynamic>> _searchResults() {
@@ -102,27 +76,67 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
               ),
             )
           : _sessionDetails.isEmpty
-              ? Center(
+              ? Container(
+                  alignment: Alignment.topLeft,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'No hay ningún detalle para el estudiante',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Lógica para crear sesión de tutoría
-                        },
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Crear detalle',
+                          'Sesión ${widget.sesion} del curso de ${_nombreCursoController!.text}',
                           style: TextStyle(
-                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.orange,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Nombre del estudiante ${_nombreEstudianteController!.text}',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'No hay ningún detalle para esta sesión. Cree un detalle ahora.',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                          textAlign: TextAlign.justify,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CrearDDScreenD(
+                                  ciclo: widget.ciclo,
+                                  documento: widget.documento,
+                                  sesion: widget.sesion,
+                                  nombre: _nombreEstudianteController.text,
+                                  codigoEstudiante:
+                                      _codigoEstudianteController!.text,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Crear detalle',
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.orange,
+                          ),
                         ),
                       ),
                     ],
@@ -131,22 +145,15 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      children: [
-                        if (_sessionDetails.isNotEmpty &&
-                            _sessionDetails[0]['SESION'] != null &&
-                            _sessionDetails[0]['CURSO'] != null)
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Sesión ${_sessionDetails[0]['SESION']} del curso de ${_sessionDetails[0]['CURSO']}',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Sesión ${_sessionDetails[0]['SESION']} del curso de ${_sessionDetails[0]['CURSO']}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -177,7 +184,17 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          // Lógica para crear sesión de tutoría
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CrearDDScreenD(
+                                ciclo: widget.ciclo,
+                                documento: widget.documento,
+                                sesion: _sessionDetails[0]['SESION'],
+                                nombre: _sessionDetails[0]['NOMBREESTUDIANTE'],
+                                codigoEstudiante: _sessionDetails[0]['CODIGO'],
+                              ),
+                            ),
+                          );
                         },
                         child: Text(
                           'Crear detalle',
@@ -250,5 +267,77 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                   ],
                 ),
     );
+  }
+
+  Future<void> fetchSessionDetails(
+      String ciclo, String documento, String sesion) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final response = await http.post(
+      Uri.parse(
+          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/DetalleTutoria.php'),
+      body: {
+        'CICLO': ciclo,
+        'DOC_EST': documento,
+        'SESION': sesion,
+        'DOC_DOC': globalCodigoDocente,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      dynamic jsonData = json.decode(response.body);
+      if (jsonData is List) {
+        setState(() {
+          _sessionDetails = List<Map<String, dynamic>>.from(
+              jsonData.map((item) => Map<String, dynamic>.from(item)).toList());
+          _isLoading = false;
+        });
+        print('Datos de la sesión en DetalleTD: $_sessionDetails');
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      throw Exception('Failed to load session details');
+    }
+  }
+
+  Future<void> _profesorEncargado(String documento) async {
+    try {
+      final response = await http.post(
+        Uri.parse(
+            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/ObtenerNombreEstudiante.php'),
+        body: {'DOC_EST': documento},
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data is List &&
+            data.isNotEmpty &&
+            data[0]['NOMBRE'] != null &&
+            data[0]['CODIGOESTUDIANTE'] != null) {
+          String nombreEstudiante = data[0]['NOMBRE'].toString();
+          String codigoEstudiante = data[0]['CODIGOESTUDIANTE'].toString();
+          _nombreEstudianteController!.text = nombreEstudiante;
+          _codigoEstudianteController!.text = codigoEstudiante;
+        } else {
+          print('No hay profesores estudiante.');
+        }
+      } else {
+        throw Exception('Failed to load next session number');
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }
