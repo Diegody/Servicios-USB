@@ -321,9 +321,9 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
         if (data is List &&
             data.isNotEmpty &&
             data[0]['NOMBRE'] != null &&
-            data[0]['CODIGOESTUDIANTE'] != null) {
+            data[0]['CODIGOESTUDIANTIL'] != null) {
           String nombreEstudiante = data[0]['NOMBRE'].toString();
-          String codigoEstudiante = data[0]['CODIGOESTUDIANTE'].toString();
+          String codigoEstudiante = data[0]['CODIGOESTUDIANTIL'].toString();
           _nombreEstudianteController!.text = nombreEstudiante;
           _codigoEstudianteController!.text = codigoEstudiante;
         } else {
