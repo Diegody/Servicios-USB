@@ -162,7 +162,7 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.orange,
+                          backgroundColor: Colors.orange,
                         ),
                       ),
                     ],
@@ -205,7 +205,7 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.orange,
+                          backgroundColor: Colors.orange,
                         ),
                       ),
                     ),

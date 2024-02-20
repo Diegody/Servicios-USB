@@ -36,7 +36,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
   @override
   void initState() {
     super.initState();
-    _profesorEncargado(widget.documento);
+    _datosEstudiante(widget.documento);
     fetchSessionDetails(widget.ciclo, widget.documento, widget.sesion);
     _nombreCursoController!.text = widget.nombreCurso;
     _nombreEstudianteController!.text = ''; // Asigna el valor correspondiente
@@ -135,7 +135,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.orange,
+                            backgroundColor: Colors.orange,
                           ),
                         ),
                       ),
@@ -203,7 +203,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.orange,
+                          backgroundColor: Colors.orange,
                         ),
                       ),
                     ),
@@ -308,7 +308,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
     }
   }
 
-  Future<void> _profesorEncargado(String documento) async {
+  Future<void> _datosEstudiante(String documento) async {
     try {
       final response = await http.post(
         Uri.parse(
@@ -321,13 +321,13 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
         if (data is List &&
             data.isNotEmpty &&
             data[0]['NOMBRE'] != null &&
-            data[0]['CODIGOESTUDIANTE'] != null) {
+            data[0]['CODIGOESTUDIANTIL'] != null) {
           String nombreEstudiante = data[0]['NOMBRE'].toString();
-          String codigoEstudiante = data[0]['CODIGOESTUDIANTE'].toString();
+          String codigoEstudiante = data[0]['CODIGOESTUDIANTIL'].toString();
           _nombreEstudianteController!.text = nombreEstudiante;
           _codigoEstudianteController!.text = codigoEstudiante;
         } else {
-          print('No hay profesores estudiante.');
+          print('No hay estudiante.');
         }
       } else {
         throw Exception('Failed to load next session number');

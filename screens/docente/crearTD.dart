@@ -507,7 +507,7 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                 },
                 child: Text('Crear tutoría a estudiante',
                     style: TextStyle(color: Colors.black)),
-                style: ElevatedButton.styleFrom(primary: Colors.orange),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
               ),
             ],
           ),

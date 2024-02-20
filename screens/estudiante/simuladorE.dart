@@ -371,7 +371,7 @@ class _SimuladorEScreenEState extends State<SimuladorEScreenE> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
+                  backgroundColor: Colors.orange,
                 ),
               ),
             ],

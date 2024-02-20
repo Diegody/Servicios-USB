@@ -74,7 +74,7 @@ class _LoginViewState extends State<LoginView> {
                               color: Colors.black,
                             )),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.orange,
+                          backgroundColor: Colors.orange,
                         ),
                       ),
                     ],
