@@ -174,7 +174,7 @@ class CredencialesEScreenE extends StatelessWidget {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
+                  backgroundColor: Colors.orange,
                 ),
               ),
             ],

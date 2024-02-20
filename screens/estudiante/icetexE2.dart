@@ -313,7 +313,7 @@ class _IcetexE2ScreenEState extends State<IcetexE2ScreenE> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.orange,
+                      backgroundColor: Colors.orange,
                     ),
                   ),
                   SizedBox(height: 10),
@@ -337,7 +337,7 @@ class _IcetexE2ScreenEState extends State<IcetexE2ScreenE> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.orange,
+                      backgroundColor: Colors.orange,
                     ),
                   ),
                   SizedBox(height: 10),
@@ -361,7 +361,7 @@ class _IcetexE2ScreenEState extends State<IcetexE2ScreenE> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.orange,
+                      backgroundColor: Colors.orange,
                     ),
                   ),
                   SizedBox(height: 16),
@@ -429,7 +429,7 @@ class _IcetexE2ScreenEState extends State<IcetexE2ScreenE> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
+                  backgroundColor: Colors.orange,
                 ),
               ),
             ],

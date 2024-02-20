@@ -135,7 +135,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.orange,
+                            backgroundColor: Colors.orange,
                           ),
                         ),
                       ),
@@ -203,7 +203,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.orange,
+                          backgroundColor: Colors.orange,
                         ),
                       ),
                     ),

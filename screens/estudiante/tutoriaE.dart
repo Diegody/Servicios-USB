@@ -526,7 +526,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
                             color: Colors.black,
                           )),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.orange,
+                        backgroundColor: Colors.orange,
                       ),
                     ),
                   ],
@@ -604,7 +604,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
                 },
                 child: Text('Enviar solicitud',
                     style: TextStyle(color: Colors.black)),
-                style: ElevatedButton.styleFrom(primary: Colors.orange),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
               ),
             ],
           ),

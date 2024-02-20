@@ -1165,7 +1165,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.orange,
+                  backgroundColor: Colors.orange,
                 ),
               ),
             ],
