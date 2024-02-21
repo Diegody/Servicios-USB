@@ -420,6 +420,12 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                   labelText: 'Temática',
                   border: OutlineInputBorder(),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una fecha de fin de tutoría';
+                  }
+                  return null;
+                },
               ),
               SizedBox(height: 20),
               DropdownButtonFormField<String>(
@@ -439,6 +445,12 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                 ],
                 onChanged: (value) {
                   _modalidadController.text = value!;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una fecha de fin de tutoría';
+                  }
+                  return null;
                 },
               ),
 
@@ -463,6 +475,12 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                 onTap: () {
                   _selectDate(context);
                 },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una fecha de fin de tutoría';
+                  }
+                  return null;
+                },
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -471,6 +489,12 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                   labelText: 'Lugar de la tutoría',
                   border: OutlineInputBorder(),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una fecha de fin de tutoría';
+                  }
+                  return null;
+                },
               ),
               SizedBox(height: 20),
               // Campo para el documento

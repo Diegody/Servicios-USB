@@ -9,6 +9,8 @@ class CrearDDScreenD extends StatefulWidget {
   final String sesion;
   final String nombre;
   final String codigoEstudiante;
+  final String fechaTutoria;
+  final String curso;
 
   const CrearDDScreenD({
     required this.ciclo,
@@ -16,6 +18,8 @@ class CrearDDScreenD extends StatefulWidget {
     required this.sesion,
     required this.nombre,
     required this.codigoEstudiante,
+    required this.fechaTutoria,
+    required this.curso,
   });
 
   @override
@@ -37,12 +41,12 @@ class _CrearDDScreenDState extends State<CrearDDScreenD> {
   final TextEditingController _asistenciaController = TextEditingController();
   final TextEditingController? _actividadController = TextEditingController();
   final TextEditingController? _acuerdosController = TextEditingController();
-  final TextEditingController? _finTutoriaController = TextEditingController();
   final TextEditingController? _InicioTutoriaController =
       TextEditingController();
-
+  final TextEditingController? _finTutoriaController = TextEditingController();
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+  final TextEditingController? _cursoController = TextEditingController();
 
   @override
   void initState() {
@@ -51,7 +55,9 @@ class _CrearDDScreenDState extends State<CrearDDScreenD> {
     _numeroSesionController.text = widget.sesion;
     _nombreEstudianteController.text = widget.nombre;
     _codigoEstudianteController.text = widget.codigoEstudiante;
-    //enviarSolicitud();
+    _InicioTutoriaController!.text = widget.fechaTutoria;
+    _cursoController!.text = widget.curso;
+    crearDetalle(widget.ciclo);
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -165,6 +171,7 @@ class _CrearDDScreenDState extends State<CrearDDScreenD> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             children: [
               Text(
@@ -229,6 +236,12 @@ class _CrearDDScreenDState extends State<CrearDDScreenD> {
                 onChanged: (value) {
                   _asistenciaController.text = value!;
                 },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una opción de asistencia';
+                  }
+                  return null;
+                },
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -237,14 +250,26 @@ class _CrearDDScreenDState extends State<CrearDDScreenD> {
                   labelText: 'Actividad realizada',
                   border: OutlineInputBorder(),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, ingrese la actividad realizada';
+                  }
+                  return null;
+                },
               ),
               SizedBox(height: 20),
-              TextField(
+              TextFormField(
                 controller: _acuerdosController,
                 decoration: InputDecoration(
                   labelText: 'Acuerdos y compromisos',
                   border: OutlineInputBorder(),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, ingrese la actividad realizada';
+                  }
+                  return null;
+                },
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -270,30 +295,39 @@ class _CrearDDScreenDState extends State<CrearDDScreenD> {
                 onTap: () {
                   _selectDate(context);
                 },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, seleccione una fecha de fin de tutoría';
+                  }
+                  return null;
+                },
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    _stopLoadingAnimation();
-                    // enviarSolicitud();
+                  if (_formKey.currentState!.validate()) {
+                    _startLoadingAnimation();
+                    crearDetalle(widget.ciclo);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Detalle creado.'),
                         backgroundColor: Colors.green,
                       ),
                     );
+                    _stopLoadingAnimation();
+                    Navigator.pop(context);
                   } else {
                     _stopLoadingAnimation();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('No se puedo crear el detalle.'),
+                        content: Text(
+                            'Por favor, complete todos los campos correctamente.'),
                         backgroundColor: Colors.red,
                       ),
                     );
                   }
                 },
-                child: Text('Crear tutoría a estudiante',
+                child: Text('Crear detalle',
                     style: TextStyle(color: Colors.black)),
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
               ),
@@ -304,42 +338,43 @@ class _CrearDDScreenDState extends State<CrearDDScreenD> {
     );
   }
 
-  // Future<void> enviarSolicitud() async {
-  //   final url =
-  //       'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/.php';
+  Future<void> crearDetalle(String ciclo) async {
+    final url =
+        'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/CrearDetalleTutoria.php';
 
-  //   Map<String, String> datosFormulario = {
-  //     '': _numeroSesionController.text,
-  //     '': _nombreEstudianteController.text,
-  //     '': _documentoEstudianteController.text,
-  //     '': _codigoEstudianteController.text,
-  //     '': _actividadController?.text ?? '',
-  //     '': _acuerdosController?.text ?? '',
-  //     '': _asistenciaController.text,
-  //     '': _InicioTutoriaController!.text,
-  //     '': _finTutoriaController!.text,
-  //   };
+    Map<String, String> datosFormulario = {
+      'NUMEROSESION': _numeroSesionController.text,
+      'NOMBRE_EST': _nombreEstudianteController.text,
+      'DOCUMENTO_EST': _documentoEstudianteController.text,
+      'CODIGO_EST': _codigoEstudianteController.text,
+      'ACTIVIDAD': _actividadController?.text ?? '',
+      'ACUERDO': _acuerdosController?.text ?? '',
+      'ASISTENCIA': _asistenciaController.text,
+      'FECH_INICIO': _InicioTutoriaController!.text,
+      'FECH_FIN': _finTutoriaController!.text,
+      'CURSO': _cursoController!.text,
+      'DOC_DOC': globalCodigoDocente,
+      'CICLO': ciclo,
+    };
 
-  //   print('Datos del formulario: $datosFormulario');
+    print('Datos del formulario del detalle xD: $datosFormulario');
 
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse(url),
-  //       body: datosFormulario,
-  //     );
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: datosFormulario,
+      );
 
-  //     if (response.statusCode == 200) {
-  //       // Procesa la respuesta si es necesario
-  //       print('Solicitud enviada con éxito: ${response.statusCode}');
-  //       print('Datos enviados al servidor: $datosFormulario');
-  //     } else {
-  //       // Maneja errores de la respuesta
-  //       print(
-  //           'Error en la solicitud. Código de estado: ${response.statusCode}');
-  //     }
-  //   } catch (error) {
-  //     // Maneja errores de la conexión
-  //     print('Error de conexión: $error');
-  //   }
-  // }
+      if (response.statusCode == 200) {
+        // Procesa la respuesta si es necesario
+        print('Detalle creado con éxito: ${response.statusCode}');
+        print('Datos enviados al servidor: $datosFormulario');
+      } else {
+        print(
+            'Error en la solicitud. Código de estado: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error de conexión: $error');
+    }
+  }
 }

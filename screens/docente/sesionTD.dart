@@ -76,7 +76,8 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
     }
   }
 
-  void _navigateToDetalleScreen(String sesion, String nombreCurso) {
+  void _navigateToDetalleScreen(
+      String sesion, String nombreCurso, String fechaTutoria, String curso) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => DetalleTDScreenD(
@@ -84,6 +85,8 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
           documento: widget.documento,
           sesion: sesion,
           nombreCurso: nombreCurso,
+          fechaTutoria: fechaTutoria,
+          curso: curso,
         ),
       ),
     );
@@ -235,7 +238,7 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                               DataColumn(label: Text('TEMATICA')),
                               DataColumn(label: Text('MODALIDAD')),
                               DataColumn(label: Text('METODOLOGIA')),
-                              DataColumn(label: Text('FECHATUTORIA')),
+                              DataColumn(label: Text('FECHA TUTORIA')),
                               DataColumn(label: Text('LUGAR')),
                               DataColumn(label: Text('DOCUMENTO')),
                             ],
@@ -251,7 +254,11 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
                                               session['NUMEROSESION']
                                                   .toString(),
                                               session['NOMBREDELCURSO']
-                                                  .toString(), // Envía el nombre del curso
+                                                  .toString(),
+                                              session['FECHATUTORIA']
+                                                  .toString(),
+                                              session['NOMBREDELCURSO']
+                                                  .toString(),
                                             );
                                           },
                                         ),

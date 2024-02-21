@@ -10,12 +10,16 @@ class DetalleTDScreenD extends StatefulWidget {
   final String documento;
   final String sesion;
   final String nombreCurso;
+  final String fechaTutoria;
+  final String curso;
 
   const DetalleTDScreenD({
     required this.ciclo,
     required this.documento,
     required this.sesion,
     required this.nombreCurso,
+    required this.fechaTutoria,
+    required this.curso,
   });
 
   @override
@@ -28,6 +32,9 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
       TextEditingController();
   final TextEditingController? _codigoEstudianteController =
       TextEditingController();
+  final TextEditingController? _fechaTutoriaController =
+      TextEditingController();
+  final TextEditingController? _cursoController = TextEditingController();
 
   List<Map<String, dynamic>> _sessionDetails = [];
   bool _isLoading = true;
@@ -36,11 +43,13 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
   @override
   void initState() {
     super.initState();
-    _profesorEncargado(widget.documento);
+    _datosEstudiante(widget.documento);
     fetchSessionDetails(widget.ciclo, widget.documento, widget.sesion);
     _nombreCursoController!.text = widget.nombreCurso;
-    _nombreEstudianteController!.text = ''; // Asigna el valor correspondiente
+    _nombreEstudianteController!.text = '';
     _codigoEstudianteController!.text = '';
+    _fechaTutoriaController!.text = widget.fechaTutoria;
+    _cursoController!.text = widget.curso;
   }
 
   List<Map<String, dynamic>> _searchResults() {
@@ -124,6 +133,8 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                                   nombre: _nombreEstudianteController.text,
                                   codigoEstudiante:
                                       _codigoEstudianteController!.text,
+                                  fechaTutoria: _fechaTutoriaController!.text,
+                                  curso: _cursoController!.text,
                                 ),
                               ),
                             );
@@ -192,6 +203,8 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                                 sesion: _sessionDetails[0]['SESION'],
                                 nombre: _sessionDetails[0]['NOMBREESTUDIANTE'],
                                 codigoEstudiante: _sessionDetails[0]['CODIGO'],
+                                fechaTutoria: _fechaTutoriaController!.text,
+                                curso: _cursoController!.text,
                               ),
                             ),
                           );
@@ -308,11 +321,11 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
     }
   }
 
-  Future<void> _profesorEncargado(String documento) async {
+  Future<void> _datosEstudiante(String documento) async {
     try {
       final response = await http.post(
         Uri.parse(
-            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/ObtenerNombreEstudiante.php'),
+            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/ObtenerDatosEstudiante.php'),
         body: {'DOC_EST': documento},
       );
 
