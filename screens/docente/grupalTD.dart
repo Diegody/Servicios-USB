@@ -10,7 +10,6 @@ class GrupalTutoriaScreen extends StatefulWidget {
 }
 
 class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
-  // ignore: unused_field
   List<Map<String, dynamic>> _data = [];
   List<Map<String, dynamic>> _filteredData = [];
   TextEditingController _searchController = TextEditingController();
@@ -19,22 +18,6 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
   void initState() {
     super.initState();
     fetchData();
-  }
-
-  Future<void> fetchData() async {
-    final response = await http.post(
-      Uri.parse(
-          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/ListaGrupos.php'),
-      body: {
-        'DOC_DOC': globalCodigoDocente,
-      },
-    );
-    if (response.statusCode == 200) {
-      setState(() {
-        _data = List<Map<String, dynamic>>.from(json.decode(response.body));
-        _filteredData = _data;
-      });
-    } else {}
   }
 
   void _filterData(String query) {
@@ -166,12 +149,14 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
                                 rowsPerPage: 6,
                                 columns: <DataColumn>[
                                   DataColumn(label: Text('NOMBRE GRUPO')),
-                                  DataColumn(label: Text('AJUSTAR GRUPO')),
+                                  DataColumn(label: Text('AJUSTAR')),
                                   DataColumn(label: Text('ELIMINAR')),
                                 ],
                                 source: DynamicDataSource(
                                   _filteredData,
                                   _navigateToDetailsPage,
+                                  _removeRow,
+                                  context, // Pasa el contexto a DynamicDataSource
                                 ),
                               ),
                             ),
@@ -212,14 +197,118 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
             ),
     );
   }
+
+  void _removeRow(int index) {
+    final rowData = _filteredData[index];
+    final groupId = rowData['ID_GRUPO'];
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Eliminar grupo',
+            style: TextStyle(
+              color: Colors.orange,
+            ),
+          ),
+          content: Text('¿Está seguro de eliminar este grupo?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              child: Text(
+                'Cancelar',
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 0, 0, 0),
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _deleteRowOnServer(groupId);
+
+                setState(() {
+                  _filteredData.removeAt(index);
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Eliminar',
+                style: TextStyle(
+                  color: Colors.orange,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> fetchData() async {
+    final response = await http.post(
+      Uri.parse(
+          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/ListaGrupos.php'),
+      body: {
+        'DOC_DOC': globalCodigoDocente,
+      },
+    );
+    if (response.statusCode == 200) {
+      setState(() {
+        _data = List<Map<String, dynamic>>.from(json.decode(response.body));
+        _filteredData = _data;
+      });
+    } else {
+      // Manejar errores o mostrar un mensaje al usuario
+    }
+  }
+
+  Future<void> _deleteRowOnServer(String groupId) async {
+    try {
+      final response = await http.post(
+        Uri.parse(
+          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/EliminarGrupo.php',
+        ),
+        body: {
+          'ID_GRUPO': groupId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Grupo eliminado exitosamente');
+      } else {
+        print(
+          'Error al eliminar el grupo. Código de estado: ${response.statusCode}',
+        );
+        // Mostrar un mensaje de error al usuario
+      }
+
+      print('Respuesta del servidor: ${response.body}');
+    } catch (e) {
+      print('Excepción al enviar la solicitud: $e');
+      // Mostrar un mensaje de error al usuario
+    }
+  }
 }
 
 class DynamicDataSource extends DataTableSource {
   final List<Map<String, dynamic>> data;
   final Function(String, String) onTap;
+  final Function(int) onRemoveRow;
+  final BuildContext context; // Agrega el contexto a DynamicDataSource
+
   int _selectedRowCount = 0;
 
-  DynamicDataSource(this.data, this.onTap);
+  DynamicDataSource(this.data, this.onTap, this.onRemoveRow, this.context);
+
+  void removeRow(int index) {
+    if (index >= 0 && index < data.length) {
+      onRemoveRow(index);
+      notifyListeners();
+    }
+  }
 
   @override
   DataRow? getRow(int index) {
@@ -239,7 +328,7 @@ class DynamicDataSource extends DataTableSource {
         IconButton(
           icon: Icon(Icons.delete),
           onPressed: () {
-            // onTap(rowData['CICLO'].toString(), rowData['DOCUMENTO'].toString());
+            removeRow(index);
           },
         ),
       ),
