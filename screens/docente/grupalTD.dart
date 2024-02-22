@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:servicios/globals.dart';
+import 'package:servicios/screens/docente/crearGD.dart';
 
 class GrupalTutoriaScreen extends StatefulWidget {
   @override
@@ -72,85 +73,143 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              onChanged: _filterData,
-              decoration: InputDecoration(
-                labelText: 'Buscar',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ),
-          _filteredData.isEmpty
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'No hay grupos creados actualmente',
-                      style: TextStyle(fontSize: 18),
+      body: _filteredData.isNotEmpty
+          ? Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: _filterData,
+                    decoration: InputDecoration(
+                      labelText: 'Buscar',
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Acción para crear grupo de tutoría
-                      },
-                      child: Text(
-                        'Crear grupo de tutoría',
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                      ),
-                    ),
-                  ],
-                )
-              : Expanded(
-                  child: ListView(
-                    children: [
-                      Theme(
-                        data: Theme.of(context).copyWith(
-                          dataTableTheme: DataTableThemeData(
-                            headingRowColor: MaterialStateColor.resolveWith(
-                              (states) => Colors.orange,
-                            ),
-                            dataRowColor: MaterialStateColor.resolveWith(
-                              (states) =>
-                                  const Color.fromARGB(255, 255, 255, 255),
-                            ),
-                          ),
-                        ),
-                        child: PaginatedDataTable(
-                          header: Text(
-                            'Grupos de tutorías actuales',
-                            style: TextStyle(
-                              color: const Color.fromARGB(255, 0, 0, 0),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          rowsPerPage: 6,
-                          columns: <DataColumn>[
-                            DataColumn(label: Text('NOMBRE GRUPO')),
-                            DataColumn(label: Text('VER MÁS')),
-                            DataColumn(label: Text('ELIMINAR')),
-                          ],
-                          source: DynamicDataSource(
-                            _filteredData,
-                            _navigateToDetailsPage,
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
-        ],
-      ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CrearGrupoTutoriaScreen(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Crear grupo de tutoría',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                  ),
+                ),
+                SizedBox(height: 20),
+                _filteredData.isEmpty
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'No hay grupos creados actualmente',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      CrearGrupoTutoriaScreen(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Crear grupo de tutoría',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                        ],
+                      )
+                    : Expanded(
+                        child: ListView(
+                          children: [
+                            Theme(
+                              data: Theme.of(context).copyWith(
+                                dataTableTheme: DataTableThemeData(
+                                  headingRowColor:
+                                      MaterialStateColor.resolveWith(
+                                    (states) => Colors.orange,
+                                  ),
+                                  dataRowColor: MaterialStateColor.resolveWith(
+                                    (states) => const Color.fromARGB(
+                                        255, 255, 255, 255),
+                                  ),
+                                ),
+                              ),
+                              child: PaginatedDataTable(
+                                header: Text(
+                                  'Grupos de tutorías actuales',
+                                  style: TextStyle(
+                                    color: const Color.fromARGB(255, 0, 0, 0),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                rowsPerPage: 6,
+                                columns: <DataColumn>[
+                                  DataColumn(label: Text('NOMBRE GRUPO')),
+                                  DataColumn(label: Text('AJUSTAR GRUPO')),
+                                  DataColumn(label: Text('ELIMINAR')),
+                                ],
+                                source: DynamicDataSource(
+                                  _filteredData,
+                                  _navigateToDetailsPage,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+              ],
+            )
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'No hay grupos creados actualmente',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CrearGrupoTutoriaScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Crear grupo de tutoría',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                    ),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }
