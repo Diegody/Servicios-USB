@@ -36,7 +36,7 @@ class _CrearGrupoTutoriaScreenState extends State<CrearGrupoTutoriaScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           key: _formKey,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             TextField(
               controller: _nombreController,
@@ -49,8 +49,7 @@ class _CrearGrupoTutoriaScreenState extends State<CrearGrupoTutoriaScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                _stopLoadingAnimation(); // Detén la animación de carga
-
+                _stopLoadingAnimation();
                 crearGrupo(_nombreController.text);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
