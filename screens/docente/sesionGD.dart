@@ -128,7 +128,6 @@ class _SesionGScreenEState extends State<SesionGScreenD> {
                 },
               ),
               if (showEstudiantesList && estudiantesEncontrados.isNotEmpty) ...[
-                // Lista de estudiantes encontrados
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount: estudiantesEncontrados.length > 5
@@ -167,8 +166,7 @@ class _SesionGScreenEState extends State<SesionGScreenD> {
                                   onTap: () {
                                     setState(() {
                                       selectedStudents.remove(student);
-                                      Navigator.of(context)
-                                          .pop(); // Cierra el diálogo
+                                      Navigator.of(context).pop();
                                     });
                                   },
                                 );
@@ -241,7 +239,6 @@ class _SesionGScreenEState extends State<SesionGScreenD> {
             data.map((item) => item['DATO'] as String).toList();
       });
     } else {
-      // Manejar errores si la solicitud al servidor falla
       print('Error al buscar estudiantes');
     }
   }
@@ -256,7 +253,6 @@ class _SesionGScreenEState extends State<SesionGScreenD> {
       if (response.statusCode == 200) {
         Map<String, dynamic> data = json.decode(response.body);
         setState(() {
-          // Asegúrate de que 'CICLO' es la clave correcta en tu JSON
           String ciclo = data['CICLO'] as String;
           _cicloController.text = ciclo;
         });

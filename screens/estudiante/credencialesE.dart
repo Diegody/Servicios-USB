@@ -59,7 +59,7 @@ class CredencialesEScreenE extends StatelessWidget {
               _buildSectionTitle('Datos del estudiante'),
               TextField(
                 controller: _idController,
-                keyboardType: TextInputType.number, // Teclado a número
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Número de identificación',
@@ -69,7 +69,7 @@ class CredencialesEScreenE extends StatelessWidget {
               SizedBox(height: 16),
               TextField(
                 controller: _dateController,
-                keyboardType: TextInputType.number, // Teclado a número
+                keyboardType: TextInputType.number,
                 inputFormatters: [_dateMaskFormatter],
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -81,7 +81,6 @@ class CredencialesEScreenE extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
-                    // Mostrar diálogo de carga
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -103,10 +102,7 @@ class CredencialesEScreenE extends StatelessWidget {
                           'fecha': _dateController.text,
                         },
                       );
-
-                      // Cerrar el diálogo de carga después de recibir la respuesta
                       Navigator.pop(context);
-
                       if (response.statusCode == 200) {
                         Map<String, dynamic> data = json.decode(response.body);
 
@@ -121,7 +117,6 @@ class CredencialesEScreenE extends StatelessWidget {
 
                         if (usuarioAsis.isNotEmpty &&
                             correoInstitucional.isNotEmpty) {
-                          // Redirige a CredencialesE2ScreenE y pasa los datos necesarios
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -138,7 +133,6 @@ class CredencialesEScreenE extends StatelessWidget {
                             ),
                           );
                         } else {
-                          // Muestra un Snackbar indicando que no se encontraron resultados para esta búsqueda
                           print(
                               'Mostrar Snackbar: No se encontraron resultados');
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -152,7 +146,6 @@ class CredencialesEScreenE extends StatelessWidget {
                           );
                         }
                       } else {
-                        // Muestra un Snackbar indicando un error en la solicitud
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Error en la solicitud'),
@@ -162,7 +155,6 @@ class CredencialesEScreenE extends StatelessWidget {
                         );
                       }
                     } catch (error) {
-                      // Manejar errores aquí
                       print('Error: $error');
                     }
                   }
@@ -215,7 +207,6 @@ class MyDrawer extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Imagen en el DrawerHeader
                       Image.asset(
                         'assets/images/logo_acreditacion.png',
                         width: 300.0,
@@ -236,15 +227,11 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.schedule),
                   title: Text('Horario de Clases'),
                   onTap: () {
-                    // Acción al hacer clic en "Horario de Clases"
-                    Navigator.pop(context); // Cierra el Drawer
-
-                    // Dirigirse a la nueva actividad (ventana)
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              HorarioEScreenE()), // Reemplaza 'HorarioScreen' con el nombre de tu nueva actividad
+                          builder: (context) => HorarioEScreenE()),
                     );
                   },
                 ),
@@ -252,8 +239,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.group),
                   title: Text('Solicitar Tutoría'),
                   onTap: () {
-                    // Acción al hacer clic en "Horarios de Tutorías"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -265,8 +251,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.attach_money),
                   title: Text('Simulador Financiero'),
                   onTap: () {
-                    // Acción al hacer clic en "Simulador Financiero"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -278,8 +263,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.rotate_left),
                   title: Text('Renovación ICETEX'),
                   onTap: () {
-                    // Acción al hacer clic en "Renovación ICETEX"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => IcetexEScreenE()),
@@ -290,8 +274,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.check),
                   title: Text('Crédito Directo USB'),
                   onTap: () {
-                    // Acción al hacer clic en "Crédito Directo USB"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -303,8 +286,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.lock),
                   title: Text('Restablecer Credenciales'),
                   onTap: () {
-                    // Acción al hacer clic en "Restablecer Credenciales"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -316,11 +298,8 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.exit_to_app),
                   title: Text('Cerrar Sesión'),
                   onTap: () {
-                    // Cierra el Drawer
                     Navigator.pop(context);
-                    // Cierra la sesión utilizando el AuthManager
                     AuthManager.logout();
-                    // Redirige al usuario a la pantalla de inicio de sesión
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => LoginView()),
@@ -336,9 +315,8 @@ class MyDrawer extends StatelessWidget {
               ],
             ),
           ),
-          // Información adicional en toda la base del menú con las mismas propiedades
           Container(
-            width: double.infinity, // Ancho máximo posible
+            width: double.infinity,
             padding: EdgeInsets.all(16.0),
             color: Colors.orange,
             child: Text(

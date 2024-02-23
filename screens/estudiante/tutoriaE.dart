@@ -103,7 +103,6 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
 
         setState(() {
           correoEstudiante = correoData;
-          // Asigna el valor del correo institucional al controlador
           _correoInstitucionalController.text = correoEstudiante;
         });
       } else {
@@ -233,8 +232,8 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
   Widget _buildTextFieldUnloked(
       String label, String hint, TextEditingController? controller) {
     return TextFormField(
-      controller: _tematicaTutoriaController, // Usa el nuevo controlador
-      enabled: true, // Ahora está habilitado para edición
+      controller: _tematicaTutoriaController,
+      enabled: true,
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
@@ -391,7 +390,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
   }
 
   void _stopLoadingAnimation() {
-    Navigator.of(context).pop(); // Cierra el diálogo de carga
+    Navigator.of(context).pop();
   }
 
   @override
@@ -470,7 +469,6 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
                 ),
                 if (showEstudiantesList &&
                     estudiantesEncontrados.isNotEmpty) ...[
-                  // Lista de estudiantes encontrados
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: estudiantesEncontrados.length > 5
@@ -496,7 +494,6 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
                     SizedBox(width: 16),
                     ElevatedButton(
                       onPressed: () {
-                        // Lógica para eliminar estudiante
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -510,8 +507,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
                                     onTap: () {
                                       setState(() {
                                         selectedStudents.remove(student);
-                                        Navigator.of(context)
-                                            .pop(); // Cierra el diálogo
+                                        Navigator.of(context).pop();
                                       });
                                     },
                                   );
@@ -591,7 +587,6 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
                   } else {
                     if (_formKey.currentState?.validate() ?? false) {
                       _stopLoadingAnimation();
-                      // Si el formulario es válido, envía la solicitud
                       enviarSolicitud();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -645,7 +640,6 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
       Map<String, dynamic> responseData = json.decode(response.body);
 
       if (responseData.containsKey("CORREOINSTITUCIONAL")) {
-        // Accede al correo en el mapa
         String correo = responseData["CORREOINSTITUCIONAL"].toString();
         return correo;
       } else {
@@ -684,8 +678,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
         body: {'PROG_ACADEMICO': programa});
 
     if (response.statusCode == 200) {
-      // print(
-      //     'Cuerpo de la respuesta (Opciones de programa academico): ${response.body}');
+      // print('Cuerpo de la respuesta (Opciones de programa academico): ${response.body}');
 
       List<dynamic> opcFincDataList = json.decode(response.body);
 
@@ -734,7 +727,6 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
             data.map((item) => item['DATO'] as String).toList();
       });
     } else {
-      // Manejar errores si la solicitud al servidor falla
       print('Error al buscar estudiantes');
     }
   }
@@ -768,21 +760,17 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
       );
 
       if (response.statusCode == 200) {
-        // Procesa la respuesta si es necesario
         print('Solicitud enviada con éxito: ${response.statusCode}');
       } else {
-        // Maneja errores de la respuesta
         print(
             'Error en la solicitud. Código de estado: ${response.statusCode}');
       }
     } catch (error) {
-      // Maneja errores de la conexiónp
       print('Error de conexión: $error');
     }
   }
 }
 
-// Agrega aquí la implementación de MyDrawer
 class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -800,7 +788,6 @@ class MyDrawer extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Imagen en el DrawerHeader
                       Image.asset(
                         'assets/images/logo_acreditacion.png',
                         width: 300.0,
@@ -821,15 +808,12 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.schedule),
                   title: Text('Horario de Clases'),
                   onTap: () {
-                    // Acción al hacer clic en "Horario de Clases"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
 
-                    // Dirigirse a la nueva actividad (ventana)
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              HorarioEScreenE()), // Reemplaza 'HorarioScreen' con el nombre de tu nueva actividad
+                          builder: (context) => HorarioEScreenE()),
                     );
                   },
                 ),
@@ -837,8 +821,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.group),
                   title: Text('Solicitar Tutoría'),
                   onTap: () {
-                    // Acción al hacer clic en "Horarios de Tutorías"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -850,8 +833,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.attach_money),
                   title: Text('Simulador Financiero'),
                   onTap: () {
-                    // Acción al hacer clic en "Simulador Financiero"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -863,8 +845,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.rotate_left),
                   title: Text('Renovación ICETEX'),
                   onTap: () {
-                    // Acción al hacer clic en "Renovación ICETEX"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => IcetexEScreenE()),
@@ -875,8 +856,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.check),
                   title: Text('Crédito Directo USB'),
                   onTap: () {
-                    // Acción al hacer clic en "Crédito Directo USB"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -888,8 +868,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.lock),
                   title: Text('Restablecer Credenciales'),
                   onTap: () {
-                    // Acción al hacer clic en "Restablecer Credenciales"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -901,11 +880,8 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.exit_to_app),
                   title: Text('Cerrar Sesión'),
                   onTap: () {
-                    // Cierra el Drawer
                     Navigator.pop(context);
-                    // Cierra la sesión utilizando el AuthManager
                     AuthManager.logout();
-                    // Redirige al usuario a la pantalla de inicio de sesión
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => LoginView()),
@@ -921,9 +897,8 @@ class MyDrawer extends StatelessWidget {
               ],
             ),
           ),
-          // Información adicional en toda la base del menú con las mismas propiedades
           Container(
-            width: double.infinity, // Ancho máximo posible
+            width: double.infinity,
             padding: EdgeInsets.all(16.0),
             color: Colors.orange,
             child: Text(

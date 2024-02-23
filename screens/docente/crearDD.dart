@@ -365,7 +365,6 @@ class _CrearDDScreenDState extends State<CrearDDScreenD> {
       );
 
       if (response.statusCode == 200) {
-        // Procesa la respuesta si es necesario
         print('Detalle creado con éxito: ${response.statusCode}');
         print('Datos enviados al servidor: $datosFormulario');
       } else {

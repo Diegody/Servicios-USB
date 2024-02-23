@@ -137,13 +137,10 @@ class _LoginViewState extends State<LoginView> {
           );
         } else {
           globalCodigoEstudiante = data['EMPLID'];
-          // Autenticación exitosa
-          globalUsername = data[
-              'NOMBRE']; // Asigna el nombre de usuario a la variable global
+          globalUsername = data['NOMBRE'];
           globalDocumento = data['DOCUMENTO'];
           if (data['NIT'] == 'DOC') {
             globalCodigoDocente = data['DOCUMENTO'];
-            // Redirige a la pantalla de inicio de docentes
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Bienvenid@, $globalUsername'),
@@ -152,7 +149,6 @@ class _LoginViewState extends State<LoginView> {
             );
             Navigator.pushReplacementNamed(context, '/docente/inicioD');
           } else if (data['NIT'] == 'NO') {
-            // Redirige a la pantalla de inicio de estudiantes
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Bienvenid@, $globalUsername'),
@@ -161,7 +157,6 @@ class _LoginViewState extends State<LoginView> {
             );
             Navigator.pushReplacementNamed(context, '/estudiante/inicioE');
           } else {
-            // Valor inesperado para NIT
             print('Valor inesperado para NIT: ${data['NIT']}');
           }
         }
@@ -176,7 +171,6 @@ class _LoginViewState extends State<LoginView> {
         );
       }
     } catch (e) {
-      // Captura y maneja cualquier excepción durante la solicitud y evita la navegación
       print('Excepción durante la solicitud HTTP: $e');
 
       ScaffoldMessenger.of(context).showSnackBar(

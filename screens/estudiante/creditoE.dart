@@ -256,11 +256,10 @@ class _CreditoEScreenEState extends State<CreditoEScreenE> {
         return DropdownMenuItem<String>(
           value: map['id'],
           child: Container(
-            width: 300, // Establece el ancho deseado
+            width: 300,
             child: Text(
               map['text'],
-              overflow: TextOverflow
-                  .ellipsis, // Trunca el texto si es demasiado largo
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         );
@@ -320,7 +319,7 @@ class _CreditoEScreenEState extends State<CreditoEScreenE> {
   }
 
   void _stopLoadingAnimation() {
-    Navigator.of(context).pop(); // Cierra el diálogo de carga
+    Navigator.of(context).pop();
   }
 
   @override
@@ -395,8 +394,6 @@ class _CreditoEScreenEState extends State<CreditoEScreenE> {
                         );
                       },
                     );
-
-                    // Crear un objeto que contenga las opciones seleccionadas
                     OpcionesSeleccionadasC opcionesSeleccionadasC =
                         OpcionesSeleccionadasC(
                       nivelAcademico: selectedOpcionLevel,
@@ -406,8 +403,6 @@ class _CreditoEScreenEState extends State<CreditoEScreenE> {
 
                     await Future.delayed(Duration(seconds: 2));
                     Navigator.pop(context);
-
-                    // Pasa las opciones seleccionadas a la segunda actividad
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -542,7 +537,6 @@ class MyDrawer extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Imagen en el DrawerHeader
                       Image.asset(
                         'assets/images/logo_acreditacion.png',
                         width: 300.0,
@@ -563,15 +557,11 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.schedule),
                   title: Text('Horario de Clases'),
                   onTap: () {
-                    // Acción al hacer clic en "Horario de Clases"
-                    Navigator.pop(context); // Cierra el Drawer
-
-                    // Dirigirse a la nueva actividad (ventana)
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              HorarioEScreenE()), // Reemplaza 'HorarioScreen' con el nombre de tu nueva actividad
+                          builder: (context) => HorarioEScreenE()),
                     );
                   },
                 ),
@@ -579,8 +569,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.group),
                   title: Text('Solicitar Tutoría'),
                   onTap: () {
-                    // Acción al hacer clic en "Horarios de Tutorías"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -592,8 +581,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.attach_money),
                   title: Text('Simulador Financiero'),
                   onTap: () {
-                    // Acción al hacer clic en "Simulador Financiero"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -605,8 +593,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.rotate_left),
                   title: Text('Renovación ICETEX'),
                   onTap: () {
-                    // Acción al hacer clic en "Renovación ICETEX"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => IcetexEScreenE()),
@@ -617,8 +604,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.check),
                   title: Text('Crédito Directo USB'),
                   onTap: () {
-                    // Acción al hacer clic en "Crédito Directo USB"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -630,8 +616,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.lock),
                   title: Text('Restablecer Credenciales'),
                   onTap: () {
-                    // Acción al hacer clic en "Restablecer Credenciales"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -643,11 +628,8 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.exit_to_app),
                   title: Text('Cerrar Sesión'),
                   onTap: () {
-                    // Cierra el Drawer
                     Navigator.pop(context);
-                    // Cierra la sesión utilizando el AuthManager
                     AuthManager.logout();
-                    // Redirige al usuario a la pantalla de inicio de sesión
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => LoginView()),
@@ -663,9 +645,8 @@ class MyDrawer extends StatelessWidget {
               ],
             ),
           ),
-          // Información adicional en toda la base del menú con las mismas propiedades
           Container(
-            width: double.infinity, // Ancho máximo posible
+            width: double.infinity,
             padding: EdgeInsets.all(16.0),
             color: Colors.orange,
             child: Text(

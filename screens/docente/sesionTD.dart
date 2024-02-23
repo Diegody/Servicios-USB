@@ -303,7 +303,6 @@ class _SesionTDScreenDState extends State<SesionTDScreenD> {
       floatingActionButton: _mostrarFormulario
           ? FloatingActionButton(
               onPressed: () {
-                // Ocultar el formulario cuando se presiona el botón de cerrar
                 setState(() {
                   _mostrarFormulario = false;
                 });

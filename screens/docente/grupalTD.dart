@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:servicios/globals.dart';
 import 'package:servicios/screens/docente/crearGD.dart';
+import 'package:servicios/screens/docente/sesionGD.dart';
 
 class GrupalTutoriaScreen extends StatefulWidget {
   @override
@@ -156,7 +157,7 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
                                   _filteredData,
                                   _navigateToDetailsPage,
                                   _removeRow,
-                                  context, // Pasa el contexto a DynamicDataSource
+                                  context,
                                 ),
                               ),
                             ),
@@ -216,7 +217,7 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop();
               },
               child: Text(
                 'Cancelar',
@@ -260,9 +261,7 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
         _data = List<Map<String, dynamic>>.from(json.decode(response.body));
         _filteredData = _data;
       });
-    } else {
-      // Manejar errores o mostrar un mensaje al usuario
-    }
+    } else {}
   }
 
   Future<void> _deleteRowOnServer(String groupId) async {
@@ -282,13 +281,11 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
         print(
           'Error al eliminar el grupo. Código de estado: ${response.statusCode}',
         );
-        // Mostrar un mensaje de error al usuario
       }
 
       print('Respuesta del servidor: ${response.body}');
     } catch (e) {
       print('Excepción al enviar la solicitud: $e');
-      // Mostrar un mensaje de error al usuario
     }
   }
 }
@@ -297,7 +294,7 @@ class DynamicDataSource extends DataTableSource {
   final List<Map<String, dynamic>> data;
   final Function(String, String) onTap;
   final Function(int) onRemoveRow;
-  final BuildContext context; // Agrega el contexto a DynamicDataSource
+  final BuildContext context;
 
   int _selectedRowCount = 0;
 
@@ -320,7 +317,11 @@ class DynamicDataSource extends DataTableSource {
         IconButton(
           icon: Icon(Icons.arrow_forward),
           onPressed: () {
-            // onTap(rowData['CICLO'].toString(), rowData['DOCUMENTO'].toString());
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SesionGScreenD(),
+              ),
+            );
           },
         ),
       ),

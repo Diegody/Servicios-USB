@@ -177,8 +177,8 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: colorScheme.copyWith(
-              primary: Colors.orange, // Color de fondo del selector de hora
-              onPrimary: Colors.white, // Color de texto del selector de hora
+              primary: Colors.orange,
+              onPrimary: Colors.white,
             ),
           ),
           child: child!,
@@ -216,7 +216,6 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
           });
           _startLoadingAnimation();
           try {
-            // Llamar nuevamente a _loadOpcProgramaAcademico() aquí
             await _loadOpcProgramaAcademico();
           } finally {
             _stopLoadingAnimation();
@@ -306,7 +305,7 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
   }
 
   void _stopLoadingAnimation() {
-    Navigator.of(context).pop(); // Cierra el diálogo de carga
+    Navigator.of(context).pop();
   }
 
   void _showSesionForm() {
@@ -354,7 +353,6 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                 ),
               ),
               SizedBox(height: 20),
-              // Campo para el número de sesión
               TextFormField(
                 controller: _numeroSesionController,
                 enabled: false,
@@ -364,7 +362,6 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                 ),
               ),
               SizedBox(height: 20),
-              // Campo para el periodo académico
               TextFormField(
                 controller: _cicloController,
                 enabled: false,
@@ -453,9 +450,7 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                   return null;
                 },
               ),
-
               SizedBox(height: 20),
-              // Campo para la metodología
               TextFormField(
                 controller: _metodologiaController,
                 enabled: false,
@@ -497,7 +492,6 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
                 },
               ),
               SizedBox(height: 20),
-              // Campo para el documento
               TextFormField(
                 controller: _docmuentoEstudianteController,
                 enabled: false,
@@ -706,16 +700,13 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
       );
 
       if (response.statusCode == 200) {
-        // Procesa la respuesta si es necesario
         print('Solicitud enviada con éxito: ${response.statusCode}');
         print('Datos enviados al servidor: $datosFormulario');
       } else {
-        // Maneja errores de la respuesta
         print(
             'Error en la solicitud. Código de estado: ${response.statusCode}');
       }
     } catch (error) {
-      // Maneja errores de la conexión
       print('Error de conexión: $error');
     }
   }

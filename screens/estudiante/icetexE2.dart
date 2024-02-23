@@ -137,7 +137,6 @@ class _IcetexE2ScreenEState extends State<IcetexE2ScreenE> {
           return;
         }
 
-        // Actualizar el estado solo si el archivo es válido
         setState(() {
           pdfPath1 = pdfPath;
           selectedFileName1 = pdfFileName;
@@ -216,7 +215,6 @@ class _IcetexE2ScreenEState extends State<IcetexE2ScreenE> {
           return;
         }
 
-        // Actualizar el estado solo si el archivo es válido
         setState(() {
           pdfPath3 = pdfPath;
           selectedFileName3 = pdfFileName;
@@ -279,7 +277,6 @@ class _IcetexE2ScreenEState extends State<IcetexE2ScreenE> {
           ),
         ),
       ),
-      // drawer: MyDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -440,14 +437,11 @@ class _IcetexE2ScreenEState extends State<IcetexE2ScreenE> {
   }
 
   void _submitForm() async {
-    // Verificar que los archivos estén seleccionados
     if (pdfPath1 == null || pdfPath2 == null || pdfPath3 == null) {
       print(
           'Por favor, seleccione todos los archivos antes de enviar la solicitud.');
       return;
     }
-
-    // Crear una instancia de http.Client para realizar la petición
     final client = http.Client();
 
     try {
@@ -493,21 +487,18 @@ class _IcetexE2ScreenEState extends State<IcetexE2ScreenE> {
               'Solicitud enviada exitosamente. Respuesta del servidor: ${response.body}');
           print('************************************');
 
-          // Archivo 1
           List<int> pdfBytes1 = await File(pdfPath1!).readAsBytes();
           String pdfBase64_1 = base64Encode(pdfBytes1);
           print('Contenido PDF 1: ${pdfBase64_1.substring(0, 20)}...');
           print('************************************');
           await enviarArchivosPDF(idProceso, pdfBase64_1, selectedFileName1!);
 
-          // Archivo 2
           List<int> pdfBytes2 = await File(pdfPath2!).readAsBytes();
           String pdfBase64_2 = base64Encode(pdfBytes2);
           print('Contenido PDF 2: ${pdfBase64_2.substring(0, 50)}...');
           print('************************************');
           await enviarArchivosPDF(idProceso, pdfBase64_2, selectedFileName2!);
 
-          // Archivo 3
           List<int> pdfBytes3 = await File(pdfPath3!).readAsBytes();
           String pdfBase64_3 = base64Encode(pdfBytes3);
           print('Contenido PDF 3: ${pdfBase64_3.substring(0, 50)}...');
@@ -555,14 +546,12 @@ class _IcetexE2ScreenEState extends State<IcetexE2ScreenE> {
     final String url =
         'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/ICETEX/EnvioArchivosRenovacion.php';
     try {
-      // Crear el cuerpo de la solicitud en formato JSON
       Map<String, dynamic> requestBody = {
         'ID_PROCESO': idProceso,
         'pdf_file': pdfBase64,
         "pdf_file_name": pdfFileName,
       };
 
-      // Realizar la solicitud HTTP POST
       final http.Response response = await http.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
@@ -631,7 +620,6 @@ class MyDrawer extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Imagen en el DrawerHeader
                       Image.asset(
                         'assets/images/logo_acreditacion.png',
                         width: 300.0,
@@ -652,15 +640,11 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.schedule),
                   title: Text('Horario de Clases'),
                   onTap: () {
-                    // Acción al hacer clic en "Horario de Clases"
-                    Navigator.pop(context); // Cierra el Drawer
-
-                    // Dirigirse a la nueva actividad (ventana)
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              HorarioEScreenE()), // Reemplaza 'HorarioScreen' con el nombre de tu nueva actividad
+                          builder: (context) => HorarioEScreenE()),
                     );
                   },
                 ),
@@ -668,8 +652,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.group),
                   title: Text('Solicitar Tutoría'),
                   onTap: () {
-                    // Acción al hacer clic en "Horarios de Tutorías"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -681,8 +664,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.attach_money),
                   title: Text('Simulador Financiero'),
                   onTap: () {
-                    // Acción al hacer clic en "Simulador Financiero"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -694,8 +676,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.rotate_left),
                   title: Text('Renovación ICETEX'),
                   onTap: () {
-                    // Acción al hacer clic en "Renovación ICETEX"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -709,8 +690,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.lock),
                   title: Text('Restablecer Credenciales'),
                   onTap: () {
-                    // Acción al hacer clic en "Restablecer Credenciales"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -722,11 +702,8 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.exit_to_app),
                   title: Text('Cerrar Sesión'),
                   onTap: () {
-                    // Cierra el Drawer
                     Navigator.pop(context);
-                    // Cierra la sesión utilizando el AuthManager
                     AuthManager.logout();
-                    // Redirige al usuario a la pantalla de inicio de sesión
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => LoginView()),
@@ -742,9 +719,8 @@ class MyDrawer extends StatelessWidget {
               ],
             ),
           ),
-          // Información adicional en toda la base del menú con las mismas propiedades
           Container(
-            width: double.infinity, // Ancho máximo posible
+            width: double.infinity,
             padding: EdgeInsets.all(16.0),
             color: Colors.orange,
             child: Text(

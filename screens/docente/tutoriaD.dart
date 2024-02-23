@@ -50,7 +50,6 @@ class TutoriaDScreenD extends StatelessWidget {
             Icons.person,
             const Color.fromRGBO(18, 182, 207, 1),
             () async {
-              // Mostrar la animación de carga
               showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -63,13 +62,10 @@ class TutoriaDScreenD extends StatelessWidget {
                 },
               );
 
-              // Simular una carga de datos (puedes reemplazar esto con tu lógica real de carga de datos)
               await Future.delayed(Duration(seconds: 2));
 
-              // Ocultar la animación de carga
               Navigator.pop(context);
 
-              // Navegar a la pantalla IndividualTutoriaScreen
               Navigator.push(
                 context,
                 MaterialPageRoute(

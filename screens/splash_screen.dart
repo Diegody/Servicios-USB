@@ -4,9 +4,8 @@ import 'login.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Espera 3 segundos y luego navega a la pantalla de inicio de sesión
     Future.delayed(
-      Duration(seconds: 3),
+      Duration(seconds: 2),
       () => Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginView()),

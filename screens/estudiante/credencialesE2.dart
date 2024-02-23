@@ -64,7 +64,6 @@ class CredencialesE2ScreenE extends StatelessWidget {
           ),
         ),
       ),
-      // drawer: MyDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -139,8 +138,7 @@ class CredencialesE2ScreenE extends StatelessWidget {
                           )
                           .closed
                           .then((reason) {
-                        Navigator.pop(
-                            context); // Cerrar el diálogo de carga después de mostrar el SnackBar
+                        Navigator.pop(context);
                       });
                     } else {
                       ScaffoldMessenger.of(context)
@@ -154,14 +152,11 @@ class CredencialesE2ScreenE extends StatelessWidget {
                           )
                           .closed
                           .then((reason) {
-                        Navigator.pop(
-                            context); // Cerrar el diálogo de carga después de mostrar el SnackBar
+                        Navigator.pop(context);
                       });
                     }
                   } finally {
-                    // Esto se ejecutará incluso si hay un error
-                    Navigator.pop(
-                        context); // Cerrar el diálogo de carga en caso de error
+                    Navigator.pop(context);
                   }
                 },
                 child: Text('Restablecer Usuario ASIS',
@@ -169,10 +164,8 @@ class CredencialesE2ScreenE extends StatelessWidget {
                       color: Colors.black,
                     )),
                 style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all(
-                      Size(320, 20)), // Especifica el tamaño deseado
-                  backgroundColor: MaterialStateProperty.all(
-                      Colors.orange), // Color de fondo del botón
+                  fixedSize: MaterialStateProperty.all(Size(320, 20)),
+                  backgroundColor: MaterialStateProperty.all(Colors.orange),
                 ),
               ),
             ),
@@ -228,8 +221,7 @@ class CredencialesE2ScreenE extends StatelessWidget {
                           )
                           .closed
                           .then((reason) {
-                        Navigator.pop(
-                            context); // Cerrar el diálogo de carga después de mostrar el SnackBar
+                        Navigator.pop(context);
                       });
                     } else {
                       ScaffoldMessenger.of(context)
@@ -243,14 +235,11 @@ class CredencialesE2ScreenE extends StatelessWidget {
                           )
                           .closed
                           .then((reason) {
-                        Navigator.pop(
-                            context); // Cerrar el diálogo de carga después de mostrar el SnackBar
+                        Navigator.pop(context);
                       });
                     }
                   } finally {
-                    // Esto se ejecutará incluso si hay un error
-                    Navigator.pop(
-                        context); // Cerrar el diálogo de carga en caso de error
+                    Navigator.pop(context);
                   }
                 },
                 child: Text(
@@ -260,10 +249,8 @@ class CredencialesE2ScreenE extends StatelessWidget {
                   ),
                 ),
                 style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all(
-                      Size(320, 20)), // Especifica el tamaño deseado
-                  backgroundColor: MaterialStateProperty.all(
-                      Colors.orange), // Color de fondo del botón
+                  fixedSize: MaterialStateProperty.all(Size(320, 20)),
+                  backgroundColor: MaterialStateProperty.all(Colors.orange),
                 ),
               ),
             ),
@@ -286,8 +273,7 @@ class CredencialesE2ScreenE extends StatelessWidget {
       SnackBar(
         content: Text(mensaje),
         duration: Duration(seconds: 3),
-        backgroundColor:
-            Colors.green, // Puedes ajustar el color según tus preferencias
+        backgroundColor: Colors.green,
       ),
     );
   }
@@ -327,7 +313,6 @@ class MyDrawer extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Imagen en el DrawerHeader
                       Image.asset(
                         'assets/images/logo_acreditacion.png',
                         width: 300.0,
@@ -348,10 +333,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.schedule),
                   title: Text('Horario de Clases'),
                   onTap: () {
-                    // Acción al hacer clic en "Horario de Clases"
-                    Navigator.pop(context); // Cierra el Drawer
-
-                    // Dirigirse a la nueva actividad (ventana)
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -363,8 +345,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.group),
                   title: Text('Solicitar Tutoría'),
                   onTap: () {
-                    // Acción al hacer clic en "Horarios de Tutorías"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -376,8 +357,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.attach_money),
                   title: Text('Simulador Financiero'),
                   onTap: () {
-                    // Acción al hacer clic en "Simulador Financiero"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -389,8 +369,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.rotate_left),
                   title: Text('Renovación ICETEX'),
                   onTap: () {
-                    // Acción al hacer clic en "Renovación ICETEX"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => IcetexEScreenE()),
@@ -401,8 +380,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.check),
                   title: Text('Crédito Directo USB'),
                   onTap: () {
-                    // Acción al hacer clic en "Crédito Directo USB"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -414,8 +392,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.lock),
                   title: Text('Restablecer Credenciales'),
                   onTap: () {
-                    // Acción al hacer clic en "Restablecer Credenciales"
-                    Navigator.pop(context); // Cierra el Drawer
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -427,13 +404,8 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.exit_to_app),
                   title: Text('Cerrar Sesión'),
                   onTap: () {
-                    // Cierra el Drawer
                     Navigator.pop(context);
-
-                    // Cierra la sesión utilizando el AuthManager
                     AuthManager.logout();
-
-                    // Redirige al usuario a la pantalla de inicio de sesión
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => LoginView()),
@@ -449,9 +421,8 @@ class MyDrawer extends StatelessWidget {
               ],
             ),
           ),
-          // Información adicional en toda la base del menú con las mismas propiedades
           Container(
-            width: double.infinity, // Ancho máximo posible
+            width: double.infinity,
             padding: EdgeInsets.all(16.0),
             color: Colors.orange,
             child: Text(
