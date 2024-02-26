@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:servicios/globals.dart';
 import 'package:servicios/screens/docente/crearGD.dart';
+import 'package:servicios/screens/docente/sesionG.dart';
 import 'package:servicios/screens/docente/sesionGD.dart';
 
 class GrupalTutoriaScreen extends StatefulWidget {
@@ -30,16 +31,13 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
     });
   }
 
-  void _navigateToDetailsPage(String ciclo, String documento) {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => SesionTDScreenD(
-    //       ciclo: ciclo,
-    //       documento: documento,
-    //     ),
-    //   ),
-    // );
+  void _navigateToDetailsPage(String id_grupo) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SesionGScreenD(idGrupo: id_grupo),
+      ),
+    );
   }
 
   @override
@@ -150,7 +148,8 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
                                 rowsPerPage: 6,
                                 columns: <DataColumn>[
                                   DataColumn(label: Text('NOMBRE GRUPO')),
-                                  DataColumn(label: Text('AJUSTAR')),
+                                  DataColumn(label: Text('AÑADIR ESTUDIANTES')),
+                                  DataColumn(label: Text('INFO GRUPO')),
                                   DataColumn(label: Text('ELIMINAR')),
                                 ],
                                 source: DynamicDataSource(
@@ -229,7 +228,6 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
             TextButton(
               onPressed: () {
                 _deleteRowOnServer(groupId);
-
                 setState(() {
                   _filteredData.removeAt(index);
                 });
@@ -292,7 +290,7 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
 
 class DynamicDataSource extends DataTableSource {
   final List<Map<String, dynamic>> data;
-  final Function(String, String) onTap;
+  final Function(String) onTap;
   final Function(int) onRemoveRow;
   final BuildContext context;
 
@@ -317,9 +315,19 @@ class DynamicDataSource extends DataTableSource {
         IconButton(
           icon: Icon(Icons.arrow_forward),
           onPressed: () {
+            onTap(rowData['ID_GRUPO'].toString());
+          },
+        ),
+      ),
+      DataCell(
+        IconButton(
+          icon: Icon(Icons.remove_red_eye_sharp),
+          onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => SesionGScreenD(),
+                builder: (context) => SesionGVScreenD(
+                  idGrupo: rowData['ID_GRUPO'].toString(),
+                ),
               ),
             );
           },

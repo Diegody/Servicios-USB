@@ -60,6 +60,11 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
     _loadProgramas();
     _loadCorreoEstudiante();
     buscarEstudiantes(textFieldController.text);
+    textFieldController.addListener(() {
+      if (textFieldController.text.isNotEmpty) {
+        buscarEstudiantes(textFieldController.text);
+      }
+    });
     _documentoController.text = globalDocumento!;
     _usernameController.text = globalUsername!;
     textFieldController.addListener(() {});
@@ -469,6 +474,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
                 ),
                 if (showEstudiantesList &&
                     estudiantesEncontrados.isNotEmpty) ...[
+                  // Lista de estudiantes encontrados
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: estudiantesEncontrados.length > 5
@@ -507,7 +513,8 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
                                     onTap: () {
                                       setState(() {
                                         selectedStudents.remove(student);
-                                        Navigator.of(context).pop();
+                                        Navigator.of(context)
+                                            .pop(); // Cierra el diálogo
                                       });
                                     },
                                   );
