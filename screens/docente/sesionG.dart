@@ -75,7 +75,7 @@ class _SesionGVScreenDState extends State<SesionGVScreenD> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'No hay ninguna sesión para el estudiante',
+                        'No hay ninguna sesión para un grupo. Cree una.',
                         style: TextStyle(fontSize: 18),
                       ),
                       SizedBox(height: 20),
@@ -84,13 +84,13 @@ class _SesionGVScreenDState extends State<SesionGVScreenD> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => SesionGScreenD(
-                                idGrupo: '',
+                                idGrupo: widget.idGrupo,
                               ),
                             ),
                           );
                         },
                         child: Text(
-                          'Crear sesión de tutoría',
+                          'Crear sesión de tutoría grupal',
                           style: TextStyle(
                             color: Colors.black,
                           ),
@@ -104,46 +104,46 @@ class _SesionGVScreenDState extends State<SesionGVScreenD> {
                 )
               : Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Buscar tutorías',
-                          prefixIcon: Icon(Icons.search),
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            _searchText = value;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => SesionGScreenD(
-                                idGrupo: '',
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Crear sesión de tutoría',
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    _buildSectionTitle('Tutorías disponibles'),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: TextField(
+                    //     decoration: InputDecoration(
+                    //       labelText: 'Buscar tutorías',
+                    //       prefixIcon: Icon(Icons.search),
+                    //       border: OutlineInputBorder(),
+                    //     ),
+                    //     onChanged: (value) {
+                    //       setState(() {
+                    //         _searchText = value;
+                    //       });
+                    //     },
+                    //   ),
+                    // ),
+                    // SizedBox(height: 20),
+                    // Center(
+                    //   child: ElevatedButton(
+                    //     onPressed: () {
+                    //       Navigator.of(context).push(
+                    //         MaterialPageRoute(
+                    //           builder: (context) => SesionGScreenD(
+                    //             idGrupo: '',
+                    //           ),
+                    //         ),
+                    //       );
+                    //     },
+                    //     child: Text(
+                    //       'Crear sesión de tutoría',
+                    //       style: TextStyle(
+                    //         color: Colors.black,
+                    //       ),
+                    //     ),
+                    //     style: ElevatedButton.styleFrom(
+                    //       backgroundColor: Colors.orange,
+                    //     ),
+                    //   ),
+                    // ),
+                    // SizedBox(height: 20),
+                    // _buildSectionTitle('Tutorías disponibles'),
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
