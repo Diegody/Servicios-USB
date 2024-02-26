@@ -339,7 +339,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
           _nombreEstudianteController!.text = nombreEstudiante;
           _codigoEstudianteController!.text = codigoEstudiante;
         } else {
-          print('No hay profesores estudiante.');
+          print('No hay estudiante.');
         }
       } else {
         throw Exception('Failed to load next session number');
