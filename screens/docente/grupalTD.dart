@@ -270,6 +270,7 @@ class _GrupalTutoriaScreenState extends State<GrupalTutoriaScreen> {
         ),
         body: {
           'ID_GRUPO': groupId,
+          'DOC_DOC': globalCodigoDocente,
         },
       );
 

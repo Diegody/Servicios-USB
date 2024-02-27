@@ -762,6 +762,7 @@ class _SesionGScreenEState extends State<SesionGScreenD> {
       'DOCUMENTOP': globalCodigoDocente,
       'ID_GRUPO': widget.idGrupo,
     };
+    print('EstudiantesData: $estudiantesData');
 
     print('Datos del formulario: $datosFormulario');
 

@@ -250,8 +250,6 @@ class _SesionGVScreenDState extends State<SesionGVScreenD> {
         },
       );
 
-      print("Dato enviado ${widget.idGrupo}");
-
       if (response.statusCode == 200) {
         dynamic jsonData = json.decode(response.body);
         print("Status code: ${response.statusCode}");
