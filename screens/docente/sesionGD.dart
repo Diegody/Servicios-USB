@@ -728,9 +728,25 @@ class _SesionGScreenEState extends State<SesionGScreenD> {
 
   Future<void> enviarSolicitud() async {
     final url =
-        'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/CrearTutoria.php';
+        'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/CrearTutoriaGrupal.php';
 
-    Map<String, String> datosFormulario = {
+    List<Map<String, String>> estudiantesData = [];
+
+    for (String student in selectedStudents) {
+      // Separar documento y nombre
+      List<String> parts = student.split('/ Nombre ');
+      String documento = parts[0].replaceAll('Documento ', '').trim();
+      String nombre = parts[1].trim();
+
+      Map<String, String> estudianteData = {
+        'NOMBRE_EST': nombre,
+        'DOCUMENTO_EST': documento,
+      };
+      estudiantesData.add(estudianteData);
+    }
+
+    Map<String, dynamic> datosFormulario = {
+      'ESTUDIANTES': jsonEncode(estudiantesData),
       'NUMEROSESION': _numeroSesionController.text,
       'PERIODOACADEMICO': _cicloController.text,
       'TIPOTUTORIA': _tipoTutoriaController.text,
@@ -744,6 +760,7 @@ class _SesionGScreenEState extends State<SesionGScreenD> {
       'FECHATUTORIA': _fechaTutoriaController!.text,
       'LUGAR': _lugarTutoriaController!.text,
       'DOCUMENTOP': globalCodigoDocente,
+      'ID_GRUPO': widget.idGrupo,
     };
 
     print('Datos del formulario: $datosFormulario');
@@ -761,8 +778,9 @@ class _SesionGScreenEState extends State<SesionGScreenD> {
         print(
             'Error en la solicitud. Código de estado: ${response.statusCode}');
       }
-    } catch (error) {
-      print('Error de conexión: $error');
+    } catch (e, stackTrace) {
+      print('Error: $e');
+      print('StackTrace: $stackTrace');
     }
   }
 
