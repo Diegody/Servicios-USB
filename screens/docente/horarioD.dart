@@ -33,30 +33,6 @@ class _HorarioDScreenDState extends State<HorarioDScreenD> {
     _fetchHorarioData();
   }
 
-  void _fetchHorarioData() async {
-    try {
-      final String codigo = globalCodigoDocente;
-      final response = await http.post(
-        Uri.parse(
-            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Horarios/Horario.php'),
-        body: {'Codigo': codigo},
-      );
-
-      if (response.statusCode == 200) {
-        List<dynamic> horarioData = json.decode(response.body);
-
-        setState(() {
-          _originalHorarioData = horarioData;
-          _filteredHorarioData = horarioData;
-        });
-      } else {
-        throw Exception('Error al cargar el horario');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-
   void _filterHorarioData(String query) {
     setState(() {
       _filteredHorarioData = _originalHorarioData
@@ -158,6 +134,30 @@ class _HorarioDScreenDState extends State<HorarioDScreenD> {
         );
       },
     );
+  }
+
+  void _fetchHorarioData() async {
+    try {
+      final String codigo = globalCodigoDocente;
+      final response = await http.post(
+        Uri.parse(
+            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Horarios/Horario.php'),
+        body: {'Codigo': codigo},
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> horarioData = json.decode(response.body);
+
+        setState(() {
+          _originalHorarioData = horarioData;
+          _filteredHorarioData = horarioData;
+        });
+      } else {
+        throw Exception('Error al cargar el horario');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 }
 

@@ -72,6 +72,7 @@ class _HorarioEScreenEState extends State<HorarioEScreenE> {
               decoration: InputDecoration(
                 labelText: 'Buscar',
                 prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
               ),
             ),
           ),

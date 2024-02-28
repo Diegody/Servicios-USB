@@ -1,40 +1,31 @@
-//
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:servicios/globals.dart';
-import 'package:servicios/screens/docente/crearDD.dart';
+// import 'package:servicios/screens/docente/crearDD.dart';
 
 class DetalleTDScreenD extends StatefulWidget {
-  final String ciclo;
-  final String documento;
   final String sesion;
-  final String nombreCurso;
-  final String fechaTutoria;
+  final String groupID;
   final String curso;
+  final String tematica;
 
   const DetalleTDScreenD({
-    required this.ciclo,
-    required this.documento,
     required this.sesion,
-    required this.nombreCurso,
-    required this.fechaTutoria,
+    required this.groupID,
     required this.curso,
+    required this.tematica,
   });
 
   @override
-  _DetalleTDScreenDState createState() => _DetalleTDScreenDState();
+  _DetalleGDScreenDState createState() => _DetalleGDScreenDState();
 }
 
-class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
-  final TextEditingController? _nombreCursoController = TextEditingController();
+class _DetalleGDScreenDState extends State<DetalleTDScreenD> {
+  // final TextEditingController? _nombreCursoController = TextEditingController();
   final TextEditingController? _nombreEstudianteController =
       TextEditingController();
-  final TextEditingController? _codigoEstudianteController =
-      TextEditingController();
-  final TextEditingController? _fechaTutoriaController =
-      TextEditingController();
-  final TextEditingController? _cursoController = TextEditingController();
+  final TextEditingController? _sesionController = TextEditingController();
+  final TextEditingController? _IDgrupoController = TextEditingController();
 
   List<Map<String, dynamic>> _sessionDetails = [];
   bool _isLoading = true;
@@ -43,13 +34,10 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
   @override
   void initState() {
     super.initState();
-    _datosEstudiante(widget.documento);
-    fetchSessionDetails(widget.ciclo, widget.documento, widget.sesion);
-    _nombreCursoController!.text = widget.nombreCurso;
+    fetchSessionDetails(widget.sesion, widget.groupID);
     _nombreEstudianteController!.text = '';
-    _codigoEstudianteController!.text = '';
-    _fechaTutoriaController!.text = widget.fechaTutoria;
-    _cursoController!.text = widget.curso;
+    _sesionController!.text = widget.sesion;
+    _IDgrupoController!.text = widget.groupID;
   }
 
   List<Map<String, dynamic>> _searchResults() {
@@ -93,7 +81,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Sesión ${widget.sesion} del curso de ${_nombreCursoController!.text}',
+                          'Sesión ${widget.sesion} del curso de ${widget.curso}',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -103,7 +91,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Nombre del estudiante ${_nombreEstudianteController!.text}',
+                          'Temática a tratar: ${widget.tematica}',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -113,7 +101,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'No hay ningún detalle para esta sesión. Cree un detalle ahora.',
+                          'No se encuentra ningun detallado creado actualmente. Cree un detalle ahora.',
                           style: TextStyle(
                             fontSize: 18,
                           ),
@@ -123,22 +111,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                       SizedBox(height: 10),
                       Center(
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => CrearDDScreenD(
-                                  ciclo: widget.ciclo,
-                                  documento: widget.documento,
-                                  sesion: widget.sesion,
-                                  nombre: _nombreEstudianteController.text,
-                                  codigoEstudiante:
-                                      _codigoEstudianteController!.text,
-                                  fechaTutoria: _fechaTutoriaController!.text,
-                                  curso: _cursoController!.text,
-                                ),
-                              ),
-                            );
-                          },
+                          onPressed: () {},
                           child: Text(
                             'Crear detalle',
                             style: TextStyle(
@@ -158,26 +131,6 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Sesión ${_sessionDetails[0]['SESION']} del curso de ${_sessionDetails[0]['CURSO']}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Nombre del estudiante ${_sessionDetails[0]['NOMBREESTUDIANTE']}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         decoration: InputDecoration(
                           labelText: 'Buscar',
@@ -189,35 +142,6 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                             _searchText = value;
                           });
                         },
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => CrearDDScreenD(
-                                ciclo: widget.ciclo,
-                                documento: widget.documento,
-                                sesion: _sessionDetails[0]['SESION'],
-                                nombre: _sessionDetails[0]['NOMBREESTUDIANTE'],
-                                codigoEstudiante: _sessionDetails[0]['CODIGO'],
-                                fechaTutoria: _fechaTutoriaController!.text,
-                                curso: _cursoController!.text,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Crear detalle',
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                        ),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -234,40 +158,41 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
                           ),
                           child: DataTable(
                             columns: [
-                              DataColumn(label: Text('NOMBRES COMPLETOS')),
-                              DataColumn(label: Text('DOCUMENTO')),
-                              DataColumn(label: Text('CÓDIGO')),
-                              DataColumn(label: Text('ACTIVIDAD REALIZADA')),
-                              DataColumn(label: Text('ACUERDOS Y COMPROMISOS')),
                               DataColumn(label: Text('INICIO TUTORÍA')),
                               DataColumn(label: Text('FIN TUTORÍA')),
+                              DataColumn(label: Text('NOMBRE')),
+                              DataColumn(label: Text('CÓDIGO')),
+                              DataColumn(label: Text('DOCUMENTO')),
+                              DataColumn(label: Text('ACTIVIDAD REALIZADA')),
+                              DataColumn(label: Text('ACUERDOS Y COMPROMISOS')),
                               DataColumn(label: Text('ASISTENCIA')),
-                              DataColumn(label: Text('CALIFICACIÓN HECHA')),
+                              DataColumn(label: Text('ESTADO CALIFICACIÓN')),
                             ],
                             rows: _searchResults()
                                 .map(
                                   (session) => DataRow(
                                     cells: [
+                                      DataCell(Text(
+                                          session['FECHAINICIO'].toString())),
+                                      DataCell(Text(
+                                          session['FECHAFINAL'].toString())),
                                       DataCell(Text(session['NOMBREESTUDIANTE']
                                           .toString())),
+                                      DataCell(Text(session['CODIGOESTUDIANTIL']
+                                          .toString())),
                                       DataCell(Text(
-                                          session['DOCUMENTO'].toString())),
-                                      DataCell(
-                                          Text(session['CODIGO'].toString())),
+                                          session['DOCUMENTOESTUDIANTE']
+                                              .toString())),
                                       DataCell(Text(
                                           session['ACTIVIDADREALIZADA']
                                               .toString())),
                                       DataCell(Text(
-                                          session['ACUERDOSYCOMPROMISOS']
+                                          session['ACUERDOSCOMPROMISOS']
                                               .toString())),
-                                      DataCell(Text(session['INICIO_TUTORIA']
-                                          .toString())),
-                                      DataCell(Text(
-                                          session['FINAL_TUTORIA'].toString())),
                                       DataCell(Text(
                                           session['ASISTENCIA'].toString())),
                                       DataCell(Text(
-                                          session['CALIFICACIONESTUDIANTE']
+                                          session['ESTADOCALIFICACION']
                                               .toString())),
                                     ],
                                   ),
@@ -282,20 +207,17 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
     );
   }
 
-  Future<void> fetchSessionDetails(
-      String ciclo, String documento, String sesion) async {
+  Future<void> fetchSessionDetails(String sesion, String groupID) async {
     setState(() {
       _isLoading = true;
     });
 
     final response = await http.post(
       Uri.parse(
-          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/DetalleTutoria.php'),
+          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/DetalleTutoriaGrupal.php'),
       body: {
-        'CICLO': ciclo,
-        'DOC_EST': documento,
         'SESION': sesion,
-        'DOC_DOC': globalCodigoDocente,
+        'ID_GRUPO': groupID,
       },
     );
 
@@ -307,7 +229,7 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
               jsonData.map((item) => Map<String, dynamic>.from(item)).toList());
           _isLoading = false;
         });
-        print('Datos de la sesión en DetalleTD: $_sessionDetails');
+        print('Datos de la sesión en DetalleGD: $_sessionDetails');
       } else {
         setState(() {
           _isLoading = false;
@@ -318,39 +240,6 @@ class _DetalleTDScreenDState extends State<DetalleTDScreenD> {
         _isLoading = false;
       });
       throw Exception('Failed to load session details');
-    }
-  }
-
-  Future<void> _datosEstudiante(String documento) async {
-    try {
-      final response = await http.post(
-        Uri.parse(
-            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/ObtenerDatosEstudiante.php'),
-        body: {'DOC_EST': documento},
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        if (data is List &&
-            data.isNotEmpty &&
-            data[0]['NOMBRE'] != null &&
-            data[0]['CODIGOESTUDIANTIL'] != null) {
-          String nombreEstudiante = data[0]['NOMBRE'].toString();
-          String codigoEstudiante = data[0]['CODIGOESTUDIANTIL'].toString();
-          _nombreEstudianteController!.text = nombreEstudiante;
-          _codigoEstudianteController!.text = codigoEstudiante;
-        } else {
-          print('No hay estudiante.');
-        }
-      } else {
-        throw Exception('Failed to load next session number');
-      }
-    } catch (error) {
-      print(error);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 }
