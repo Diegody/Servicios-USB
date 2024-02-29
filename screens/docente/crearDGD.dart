@@ -22,15 +22,13 @@ class _CrearDGDScreenDState extends State<CrearDGDScreenD> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // ignore: unused_field
   List<Map<String, dynamic>> _sessionDetails = [];
+  List<bool> asistenciaEstudiantes = [];
+
   // ignore: unused_field
   bool _isLoading = true;
+  bool asistencia = false;
 
   TextEditingController _numeroSesionController = TextEditingController();
-  TextEditingController _nombreEstudianteController = TextEditingController();
-  TextEditingController _codigoEstudianteController = TextEditingController();
-  TextEditingController _documentoEstudianteController =
-      TextEditingController();
-  final TextEditingController _asistenciaController = TextEditingController();
   final TextEditingController? _actividadController = TextEditingController();
   final TextEditingController? _acuerdosController = TextEditingController();
   final TextEditingController? _InicioTutoriaController =
@@ -44,7 +42,7 @@ class _CrearDGDScreenDState extends State<CrearDGDScreenD> {
     super.initState();
     _numeroSesionController.text = widget.sesion;
     _InicioTutoriaController!.text = widget.fechaTuto;
-    // crearDetalle(widget.ciclo);
+    //crearDetalle();
     _datosEstudiante(widget.groupID);
   }
 
@@ -142,8 +140,8 @@ class _CrearDGDScreenDState extends State<CrearDGDScreenD> {
 
   List<Widget> _buildStudentDetails(List<Map<String, dynamic>> students) {
     List<Widget> widgets = [];
-
     for (int i = 0; i < students.length; i++) {
+      asistenciaEstudiantes.add(false);
       widgets.add(
         Container(
           margin: EdgeInsets.symmetric(vertical: 5),
@@ -167,23 +165,19 @@ class _CrearDGDScreenDState extends State<CrearDGDScreenD> {
               'Nombre: ${students[i]['NOMBRES']}',
               style: TextStyle(fontSize: 14),
             ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Checkbox(
-                  value: true,
-                  onChanged: (bool? value) {
-                    // Implementa lógica para manejar la asistencia aquí
-                  },
-                  activeColor: Colors.orange,
-                ),
-              ],
+            trailing: Checkbox(
+              value: asistenciaEstudiantes[i],
+              onChanged: (bool? value) {
+                setState(() {
+                  asistenciaEstudiantes[i] = value ?? false;
+                });
+              },
+              activeColor: Colors.orange,
             ),
           ),
         ),
       );
     }
-
     return widgets;
   }
 
@@ -291,7 +285,16 @@ class _CrearDGDScreenDState extends State<CrearDGDScreenD> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _startLoadingAnimation();
-                    // crearDetalle(widget.ciclo);
+                    crearDetalle(
+                      estudiantesData: _sessionDetails,
+                      asistenciaEstudiantes: asistenciaEstudiantes,
+                      numeroSesion: _numeroSesionController.text,
+                      fechaInicio: _InicioTutoriaController!.text,
+                      fechaFin: _finTutoriaController!.text,
+                      actividad: _actividadController!.text,
+                      acuerdos: _acuerdosController!.text,
+                      idGrupo: widget.groupID,
+                    );
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Detalle creado.'),
@@ -353,15 +356,43 @@ class _CrearDGDScreenDState extends State<CrearDGDScreenD> {
     }
   }
 
-  Future<void> crearDetalle(String ciclo) async {
+  Future<void> crearDetalle({
+    required List<Map<String, dynamic>> estudiantesData,
+    required List<bool> asistenciaEstudiantes,
+    required String numeroSesion,
+    required String fechaInicio,
+    required String fechaFin,
+    required String actividad,
+    required String acuerdos,
+    required String idGrupo,
+  }) async {
     final url =
         'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/CrearDetalleTutoriaGrupal.php';
 
-    Map<String, String> datosFormulario = {
-      // Aqui van los datos a enviar
+    List<Map<String, dynamic>> asistenciaData = [];
+
+    for (int i = 0; i < estudiantesData.length; i++) {
+      Map<String, dynamic> estudianteData = {
+        'CEDULA': estudiantesData[i]['CEDULA'],
+        'NOMBRES': estudiantesData[i]['NOMBRES'],
+        'ASISTENCIA': asistenciaEstudiantes[i] ? 'Si' : 'No',
+      };
+      asistenciaData.add(estudianteData);
+    }
+
+    Map<String, dynamic> datosFormulario = {
+      'ESTUDIANTES': jsonEncode(estudiantesData),
+      'ASISTENCIA': jsonEncode(asistenciaData),
+      'NUMEROSESION': numeroSesion,
+      'FECHA_INICIO': fechaInicio,
+      'FECHA_FIN': fechaFin,
+      'ACTIVIDAD': actividad,
+      'ACUERDOS': acuerdos,
+      'ID_GRUPO': idGrupo,
+      'DOC_DOC': globalCodigoDocente,
     };
 
-    print('Datos del formulario del detalle xD: $datosFormulario');
+    print('Datos del formulario del detalle: $datosFormulario');
 
     try {
       final response = await http.post(

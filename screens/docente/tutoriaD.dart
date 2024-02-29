@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:servicios/auth.dart';
+import 'package:servicios/globals.dart';
 import 'package:servicios/screens/docente/calendarioTD.dart';
 import 'package:servicios/screens/docente/grupalTD.dart';
 import 'package:servicios/screens/docente/individualTD.dart';
+import 'package:servicios/screens/login.dart';
+import 'horarioD.dart';
 
 void main() => runApp(MyApp());
 
@@ -38,6 +42,7 @@ class TutoriaDScreenD extends StatelessWidget {
           ),
         ),
       ),
+      drawer: MyDrawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -101,7 +106,7 @@ class TutoriaDScreenD extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CalendarioTutoriaScreen(),
+                  builder: (context) => CalendarioD(),
                 ),
               );
             },
@@ -162,6 +167,102 @@ class TutoriaDScreenD extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MyDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        'assets/images/logo_acreditacion.png',
+                        width: 300.0,
+                        height: 100.0,
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        globalUsername ?? 'Nombre de Usuario',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.schedule),
+                  title: Text('Horario de Clases'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HorarioDScreenD()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.group),
+                  title: Text('Tutorías Académicas'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TutoriaDScreenD()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.exit_to_app),
+                  title: Text('Cerrar Sesión'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    AuthManager.logout();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginView()),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Cerrando sesión...'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(16.0),
+            color: Colors.orange,
+            child: Text(
+              appVersion,
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Colors.black54,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
