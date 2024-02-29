@@ -1,19 +1,21 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-// import 'package:servicios/screens/docente/crearDD.dart';
+import 'package:servicios/screens/docente/crearDGD.dart';
 
 class DetalleTDScreenD extends StatefulWidget {
   final String sesion;
   final String groupID;
   final String curso;
   final String tematica;
+  final String fechaTuto;
 
   const DetalleTDScreenD({
     required this.sesion,
     required this.groupID,
     required this.curso,
     required this.tematica,
+    required this.fechaTuto,
   });
 
   @override
@@ -49,6 +51,20 @@ class _DetalleGDScreenDState extends State<DetalleTDScreenD> {
             value.toString().toLowerCase().contains(_searchText.toLowerCase()));
       }).toList();
     }
+  }
+
+  void _navigateToDetalleScreen(String sesion, String groupID, String curso,
+      String tematica, String fechaTuto) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => DetalleTDScreenD(
+            sesion: sesion,
+            groupID: groupID,
+            curso: curso,
+            tematica: tematica,
+            fechaTuto: fechaTuto),
+      ),
+    );
   }
 
   @override
@@ -111,7 +127,17 @@ class _DetalleGDScreenDState extends State<DetalleTDScreenD> {
                       SizedBox(height: 10),
                       Center(
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CrearDGDScreenD(
+                                  sesion: widget.sesion,
+                                  groupID: widget.groupID,
+                                  fechaTuto: widget.fechaTuto,
+                                ),
+                              ),
+                            );
+                          },
                           child: Text(
                             'Crear detalle',
                             style: TextStyle(

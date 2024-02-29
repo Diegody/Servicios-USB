@@ -44,12 +44,16 @@ class _SesionGVScreenDState extends State<SesionGVScreenD> {
     });
   }
 
-  void _navigateToDetalleScreen(
-      String sesion, String groupID, String curso, String tematica) {
+  void _navigateToDetalleScreen(String sesion, String groupID, String curso,
+      String tematica, String fechaTuto) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => DetalleTDScreenD(
-            sesion: sesion, groupID: groupID, curso: curso, tematica: tematica),
+            sesion: sesion,
+            groupID: groupID,
+            curso: curso,
+            tematica: tematica,
+            fechaTuto: fechaTuto),
       ),
     );
   }
@@ -136,6 +140,7 @@ class _SesionGVScreenDState extends State<SesionGVScreenD> {
                                   session['GRUPO'].toString(),
                                   session['NOMBREDELCURSO'].toString(),
                                   session['TEMATICA'].toString(),
+                                  session['FECHATUTORIA'].toString(),
                                 );
                               },
                             ),
