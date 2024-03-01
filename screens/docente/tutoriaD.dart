@@ -106,7 +106,7 @@ class TutoriaDScreenD extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CalendarioD(),
+                  builder: (context) => CalendarioTD(),
                 ),
               );
             },
