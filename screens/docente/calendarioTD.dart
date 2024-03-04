@@ -51,42 +51,6 @@ class _CalendarioScreenDState extends State<CalendarioTD> {
     _filteredTutorias = [];
   }
 
-  Future<void> _fetchTutorias() async {
-    final response = await http.post(
-      Uri.parse(
-          'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/MostrarGrupoCalendario.php'),
-      body: {'DOC_DOC': globalCodigoDocente},
-    );
-
-    if (response.statusCode == 200) {
-      final dynamic responseData = json.decode(response.body);
-      if (responseData is Map<String, dynamic> ||
-          responseData is List<dynamic>) {
-        setState(() {
-          _data = responseData;
-          _filteredTutorias = List<Tutoria>.from(
-            (_data is List<dynamic> ? _data : []).map(
-              (tutoria) => Tutoria(
-                fechaTutoria: tutoria['FECHATUTORIA'],
-                nombresEstudiante: tutoria['NOMBRES'],
-                nombreCurso: tutoria['NOMBREDELCURSO'],
-                profesorResponsable: tutoria['PROFESORRESPONSABLE'],
-                tematica: tutoria['TEMATICA'],
-                modalidad: tutoria['MODALIDAD'],
-                lugar: tutoria['LUGAR'],
-                metodologia: tutoria['METODOLOGIA'],
-              ),
-            ),
-          );
-        });
-      } else {
-        print('Error: Respuesta no válida');
-      }
-    } else {
-      print('Error en la solicitud HTTP: ${response.statusCode}');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -215,8 +179,8 @@ class _CalendarioScreenDState extends State<CalendarioTD> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               border: Border.all(
-                color: Colors.orange,
-                width: 2.0,
+                color: _getColorForMetodologia(tutoria.metodologia),
+                width: 3.0,
               ),
             ),
             padding: const EdgeInsets.all(16.0),
@@ -224,7 +188,7 @@ class _CalendarioScreenDState extends State<CalendarioTD> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Fecha: ${tutoria.fechaTutoria.toString()}',
+                  'Fecha: ${_formatFecha(tutoria.fechaTutoria)}',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -265,5 +229,60 @@ class _CalendarioScreenDState extends State<CalendarioTD> {
         );
       },
     );
+  }
+
+  String _formatFecha(String fecha) {
+    return fecha;
+  }
+
+  Color _getColorForMetodologia(String metodologia) {
+    return metodologia == 'Individual' ? Colors.orange : Colors.green;
+  }
+
+  Future<void> _fetchTutorias() async {
+    try {
+      final response = await http.post(
+        Uri.parse(
+            'https://academia.usbbog.edu.co/centralizacion_servicios_ios/API/Tutorias/DocentesTutoria/MostrarGrupoCalendario.php'),
+        body: {'DOC_DOC': globalCodigoDocente},
+      );
+
+      if (response.statusCode == 200) {
+        final dynamic responseData = json.decode(response.body);
+        print('Respuesta del servidor: $responseData');
+
+        if (responseData is List<dynamic>) {
+          setState(() {
+            _data = responseData;
+            _filteredTutorias = (_data as List<dynamic>)
+                .map((tutoria) {
+                  try {
+                    return Tutoria(
+                      fechaTutoria: tutoria['FECHATUTORIA'],
+                      nombresEstudiante: tutoria['NOMBRE'],
+                      nombreCurso: tutoria['NOMBREDELCURSO'],
+                      profesorResponsable: tutoria['PROFESOR'],
+                      tematica: tutoria['TEMATICA'],
+                      modalidad: tutoria['MODALIDAD'],
+                      lugar: tutoria['LUGAR'],
+                      metodologia: tutoria['METODOLOGIA'],
+                    );
+                  } catch (e) {
+                    print('Error al mapear tutoria: $e');
+                    return null;
+                  }
+                })
+                .whereType<Tutoria>()
+                .toList();
+          });
+        } else {
+          print('Error: Respuesta no válida');
+        }
+      } else {
+        print('Error en la solicitud HTTP: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error en la solicitud HTTP: $error');
+    }
   }
 }
