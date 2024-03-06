@@ -109,46 +109,39 @@ class _CalendarioScreenDState extends State<CalendarioTD> {
 
   void _filterTutorias(String query) {
     if (_data is List<dynamic>) {
-      final filteredTutorias = _data
-          .where((tutoria) =>
-              (tutoria['FECHATUTORIA'] ?? '')
-                  .toLowerCase()
-                  .contains(query.toLowerCase()) ||
-              (tutoria['NOMBRES'] ?? '')
-                  .toLowerCase()
-                  .contains(query.toLowerCase()) ||
-              (tutoria['NOMBREDELCURSO'] ?? '')
-                  .toLowerCase()
-                  .contains(query.toLowerCase()) ||
-              (tutoria['PROFESORRESPONSABLE'] ?? '')
-                  .toLowerCase()
-                  .contains(query.toLowerCase()) ||
-              (tutoria['TEMATICA'] ?? '')
-                  .toLowerCase()
-                  .contains(query.toLowerCase()) ||
-              (tutoria['MODALIDAD'] ?? '')
-                  .toLowerCase()
-                  .contains(query.toLowerCase()) ||
-              (tutoria['LUGAR'] ?? '')
-                  .toLowerCase()
-                  .contains(query.toLowerCase()) ||
-              (tutoria['METODOLOGIA'] ?? '')
-                  .toLowerCase()
-                  .contains(query.toLowerCase()))
-          .toList();
+      final filteredTutorias = _data.where((tutoria) {
+        final fechaTutoria = tutoria['FECHATUTORIA']?.toLowerCase() ?? '';
+        final nombres = tutoria['NOMBRES']?.toLowerCase() ?? '';
+        final nombreCurso = tutoria['NOMBREDELCURSO']?.toLowerCase() ?? '';
+        final profesorResponsable =
+            tutoria['PROFESORRESPONSABLE']?.toLowerCase() ?? '';
+        final tematica = tutoria['TEMATICA']?.toLowerCase() ?? '';
+        final modalidad = tutoria['MODALIDAD']?.toLowerCase() ?? '';
+        final lugar = tutoria['LUGAR']?.toLowerCase() ?? '';
+        final metodologia = tutoria['METODOLOGIA']?.toLowerCase() ?? '';
+
+        return fechaTutoria.contains(query.toLowerCase()) ||
+            nombres.contains(query.toLowerCase()) ||
+            nombreCurso.contains(query.toLowerCase()) ||
+            profesorResponsable.contains(query.toLowerCase()) ||
+            tematica.contains(query.toLowerCase()) ||
+            modalidad.contains(query.toLowerCase()) ||
+            lugar.contains(query.toLowerCase()) ||
+            metodologia.contains(query.toLowerCase());
+      }).toList();
 
       setState(() {
         _filteredTutorias = List<Tutoria>.from(
           filteredTutorias.map(
             (tutoria) => Tutoria(
-              fechaTutoria: tutoria['FECHATUTORIA'],
-              nombresEstudiante: tutoria['NOMBRES'],
-              nombreCurso: tutoria['NOMBREDELCURSO'],
-              profesorResponsable: tutoria['PROFESORRESPONSABLE'],
-              tematica: tutoria['TEMATICA'],
-              modalidad: tutoria['MODALIDAD'],
-              lugar: tutoria['LUGAR'],
-              metodologia: tutoria['METODOLOGIA'],
+              fechaTutoria: tutoria['FECHATUTORIA'] ?? '',
+              nombresEstudiante: tutoria['NOMBRE'] ?? '',
+              nombreCurso: tutoria['NOMBREDELCURSO'] ?? '',
+              profesorResponsable: tutoria['PROFESOR'] ?? '',
+              tematica: tutoria['TEMATICA'] ?? '',
+              modalidad: tutoria['MODALIDAD'] ?? '',
+              lugar: tutoria['LUGAR'] ?? '',
+              metodologia: tutoria['METODOLOGIA'] ?? '',
             ),
           ),
         );
