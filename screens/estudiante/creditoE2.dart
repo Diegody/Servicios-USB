@@ -153,7 +153,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -191,7 +191,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -230,7 +230,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -268,7 +268,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -306,7 +306,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -344,7 +344,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -382,7 +382,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -420,7 +420,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -458,7 +458,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -497,7 +497,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -536,7 +536,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -575,7 +575,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -614,7 +614,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
               content:
                   Text('El tamaño del archivo "$pdfFileName" supera los 2 MB.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
           return;
@@ -1269,7 +1269,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
             SnackBar(
               content: Text('Solicitud enviada con éxito'),
               backgroundColor: Colors.green,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
         } else {
@@ -1278,7 +1278,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
             SnackBar(
               content: Text('Error al enviar la solicitud.'),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ),
           );
         }
@@ -1288,7 +1288,7 @@ class _CreditoE2ScreenEState extends State<CreditoE2ScreenE> {
           SnackBar(
             content: Text('Error en la solicitud HTTP.'),
             backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
+            duration: Duration(seconds: 5),
           ),
         );
       }
@@ -1479,6 +1479,7 @@ class MyDrawer extends StatelessWidget {
                       SnackBar(
                         content: Text('Cerrando sesión...'),
                         backgroundColor: Colors.red,
+                        duration: Duration(seconds: 2),
                       ),
                     );
                   },

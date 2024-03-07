@@ -167,6 +167,7 @@ class _LoginViewState extends State<LoginView> {
           SnackBar(
             content: Text('Hubo un problema al procesar la solicitud'),
             backgroundColor: Colors.red,
+            duration: Duration(seconds: 5),
           ),
         );
       }
@@ -177,6 +178,7 @@ class _LoginViewState extends State<LoginView> {
         SnackBar(
           content: Text('Hubo un problema al procesar la solicitud'),
           backgroundColor: Colors.red,
+          duration: Duration(seconds: 5),
         ),
       );
     }

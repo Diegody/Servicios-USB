@@ -164,6 +164,7 @@ class MyDrawer extends StatelessWidget {
                       SnackBar(
                         content: Text('Cerrando sesión...'),
                         backgroundColor: Colors.red,
+                        duration: Duration(seconds: 2),
                       ),
                     );
                   },

@@ -55,6 +55,7 @@ class _CrearGrupoTutoriaScreenState extends State<CrearGrupoTutoriaScreen> {
                   SnackBar(
                     content: Text('Grupo creado correctamente.'),
                     backgroundColor: Colors.green,
+                    duration: Duration(seconds: 5),
                   ),
                 );
               },

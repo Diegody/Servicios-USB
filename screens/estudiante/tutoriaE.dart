@@ -589,6 +589,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
                         content: Text(
                             'Debe seleccionar al menos un estudiante para la opción grupal.'),
                         backgroundColor: Colors.red,
+                        duration: Duration(seconds: 5),
                       ),
                     );
                   } else {
@@ -599,6 +600,7 @@ class _TutoriaEScreenEState extends State<TutoriaEScreenE> {
                         SnackBar(
                           content: Text('Solicitud enviada'),
                           backgroundColor: Colors.green,
+                          duration: Duration(seconds: 5),
                         ),
                       );
                     }
@@ -897,6 +899,7 @@ class MyDrawer extends StatelessWidget {
                       SnackBar(
                         content: Text('Cerrando sesión...'),
                         backgroundColor: Colors.red,
+                        duration: Duration(seconds: 2),
                       ),
                     );
                   },

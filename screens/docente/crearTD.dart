@@ -481,7 +481,7 @@ class _CrearTDScreenDState extends State<CrearTDScreenD> {
               TextFormField(
                 controller: _lugarTutoriaController,
                 decoration: InputDecoration(
-                  labelText: 'Lugar de la tutoría',
+                  labelText: 'Lugar de la tutoría o link de invitación',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {

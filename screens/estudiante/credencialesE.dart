@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:servicios/screens/estudiante/creditoE.dart';
 import 'package:servicios/screens/estudiante/simuladorE.dart';
 import 'package:servicios/screens/estudiante/tutoriaE.dart';
@@ -11,7 +12,7 @@ import '../login.dart';
 import 'credencialesE2.dart';
 import 'horarioE.dart';
 import 'icetexE.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,15 +25,54 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
-class CredencialesEScreenE extends StatelessWidget {
+class CredencialesEScreenE extends StatefulWidget {
+  @override
+  _CredencialesEScreenEState createState() => _CredencialesEScreenEState();
+}
+
+class _CredencialesEScreenEState extends State<CredencialesEScreenE> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _idController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
-  MaskTextInputFormatter _dateMaskFormatter = MaskTextInputFormatter(
-      mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
+  // MaskTextInputFormatter _dateMaskFormatter = MaskTextInputFormatter(
+  //     mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
 
-  CredencialesEScreenE({super.key});
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    Locale myLocale = Localizations.localeOf(context);
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final TextStyle? style = theme.textTheme.subtitle1;
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(1950),
+      lastDate: DateTime(2101),
+      locale: myLocale,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: colorScheme.copyWith(
+              primary: Colors.orange,
+              onPrimary: Colors.white,
+            ),
+            textTheme: theme.textTheme.copyWith(
+              subtitle1: style?.copyWith(color: Colors.orange),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        _dateController.text = DateFormat('dd/MM/yyyy').format(picked);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,18 +104,23 @@ class CredencialesEScreenE extends StatelessWidget {
                   border: OutlineInputBorder(),
                   labelText: 'Número de identificación',
                   hintText: 'Ingrese el documento',
+                  prefixIcon: Icon(Icons.person),
                 ),
               ),
               SizedBox(height: 16),
-              TextField(
+              DateTimeField(
+                format: DateFormat('dd/MM/yyyy'),
                 controller: _dateController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [_dateMaskFormatter],
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Fecha de nacimiento',
-                  hintText: 'DD/MM/YYYY',
+                  hintText: 'Seleccione la fecha',
+                  prefixIcon: Icon(Icons.calendar_today),
                 ),
+                onShowPicker: (context, currentValue) async {
+                  await _selectDate(context);
+                  return selectedDate;
+                },
               ),
               SizedBox(height: 30),
               ElevatedButton(
@@ -85,10 +130,11 @@ class CredencialesEScreenE extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return Center(
-                            child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.orange),
-                        ));
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.orange),
+                          ),
+                        );
                       },
                     );
 
@@ -140,7 +186,7 @@ class CredencialesEScreenE extends StatelessWidget {
                               content: Text(
                                 'No se encontraron resultados para esta búsqueda.',
                               ),
-                              duration: Duration(seconds: 3),
+                              duration: Duration(seconds: 5),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -149,7 +195,7 @@ class CredencialesEScreenE extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Error en la solicitud'),
-                            duration: Duration(seconds: 3),
+                            duration: Duration(seconds: 5),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -308,6 +354,7 @@ class MyDrawer extends StatelessWidget {
                       SnackBar(
                         content: Text('Cerrando sesión...'),
                         backgroundColor: Colors.red,
+                        duration: Duration(seconds: 2),
                       ),
                     );
                   },

@@ -587,7 +587,7 @@ class _SesionGScreenEState extends State<SesionGScreenD> {
               TextFormField(
                 controller: _lugarTutoriaController,
                 decoration: InputDecoration(
-                  labelText: 'Lugar de la tutoría',
+                  labelText: 'Lugar de la tutoría o link de invitación',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -607,6 +607,7 @@ class _SesionGScreenEState extends State<SesionGScreenD> {
                       SnackBar(
                         content: Text('Sesión de tutoría creada y enviada.'),
                         backgroundColor: Colors.green,
+                        duration: Duration(seconds: 5),
                       ),
                     );
                   } else {
@@ -616,6 +617,7 @@ class _SesionGScreenEState extends State<SesionGScreenD> {
                         content:
                             Text('No se puedo crear la sesión de tutoría.'),
                         backgroundColor: Colors.red,
+                        duration: Duration(seconds: 5),
                       ),
                     );
                   }

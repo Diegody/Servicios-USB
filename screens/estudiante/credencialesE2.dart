@@ -134,6 +134,7 @@ class CredencialesE2ScreenE extends StatelessWidget {
                                 'Se ha enviado la nueva contraseña al correo institucional.',
                               ),
                               backgroundColor: Colors.green,
+                              duration: Duration(seconds: 5),
                             ),
                           )
                           .closed
@@ -148,6 +149,7 @@ class CredencialesE2ScreenE extends StatelessWidget {
                                 'Error al enviar la nueva contraseña al correo.',
                               ),
                               backgroundColor: Colors.red,
+                              duration: Duration(seconds: 5),
                             ),
                           )
                           .closed
@@ -217,6 +219,7 @@ class CredencialesE2ScreenE extends StatelessWidget {
                                 'Se ha enviado la nueva contraseña al correo personal.',
                               ),
                               backgroundColor: Colors.green,
+                              duration: Duration(seconds: 5),
                             ),
                           )
                           .closed
@@ -231,6 +234,7 @@ class CredencialesE2ScreenE extends StatelessWidget {
                                 'Error al enviar la nueva contraseña al correo.',
                               ),
                               backgroundColor: Colors.red,
+                              duration: Duration(seconds: 5),
                             ),
                           )
                           .closed
@@ -264,16 +268,6 @@ class CredencialesE2ScreenE extends StatelessWidget {
             SizedBox(height: 16),
           ],
         ),
-      ),
-    );
-  }
-
-  void mostrarSnackBar(BuildContext context, String mensaje) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(mensaje),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.green,
       ),
     );
   }

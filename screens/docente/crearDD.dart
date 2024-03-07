@@ -311,6 +311,7 @@ class _CrearDDScreenDState extends State<CrearDDScreenD> {
                       SnackBar(
                         content: Text('Detalle creado.'),
                         backgroundColor: Colors.green,
+                        duration: Duration(seconds: 5),
                       ),
                     );
                     _stopLoadingAnimation();
@@ -322,6 +323,7 @@ class _CrearDDScreenDState extends State<CrearDDScreenD> {
                         content: Text(
                             'Por favor, complete todos los campos correctamente.'),
                         backgroundColor: Colors.red,
+                        duration: Duration(seconds: 5),
                       ),
                     );
                   }

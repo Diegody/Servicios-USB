@@ -299,6 +299,7 @@ class _CrearDGDScreenDState extends State<CrearDGDScreenD> {
                       SnackBar(
                         content: Text('Detalle creado.'),
                         backgroundColor: Colors.green,
+                        duration: Duration(seconds: 5),
                       ),
                     );
                     _stopLoadingAnimation();
@@ -310,6 +311,7 @@ class _CrearDGDScreenDState extends State<CrearDGDScreenD> {
                         content: Text(
                             'Por favor, complete todos los campos correctamente.'),
                         backgroundColor: Colors.red,
+                        duration: Duration(seconds: 5),
                       ),
                     );
                   }

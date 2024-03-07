@@ -342,7 +342,7 @@ class _SimuladorEScreenEState extends State<SimuladorEScreenE> {
                               content: Text(
                                 'Error en el formato de la respuesta del servidor',
                               ),
-                              duration: Duration(seconds: 3),
+                              duration: Duration(seconds: 5),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -353,7 +353,7 @@ class _SimuladorEScreenEState extends State<SimuladorEScreenE> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Error en la solicitud al servidor'),
-                            duration: Duration(seconds: 3),
+                            duration: Duration(seconds: 5),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -549,6 +549,7 @@ class MyDrawer extends StatelessWidget {
                       SnackBar(
                         content: Text('Cerrando sesión...'),
                         backgroundColor: Colors.red,
+                        duration: Duration(seconds: 2),
                       ),
                     );
                   },
